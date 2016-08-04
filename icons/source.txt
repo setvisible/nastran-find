@@ -1,0 +1,3 @@
+filefind.ico
+     from KDE iconskid package
+
