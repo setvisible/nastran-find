@@ -1,6 +1,6 @@
 # Nastranfind
 
-Nastranfind is a solution for browsing NASTRAN input deck files for for Windows, Mac OS X and Linux. 
+Nastranfind is a solution for browsing NASTRAN input deck files for Windows, Mac OS X and Linux. 
 
 Its core is developed in C++, based on the **Curses** library. 
 
@@ -67,10 +67,11 @@ On Windows
 __Commands:__
 
  - Press `F` to find a word
- - Press `S` `Z` `Q` `W` or the keypad to browse the results
+ - Press `A` `S` `Z` `X` or the keypad to browse the results
  - Press `Q` to quit
 
 ## License
 
 The code is released under the GNU **LGPLv3** open source license. 
 
+[https://www.gnu.org/licenses/lgpl-3.0.en.html](https://www.gnu.org/licenses/lgpl-3.0.en.html)
