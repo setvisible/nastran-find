@@ -15,3 +15,4 @@ HEADERS += ../../../src/fileinfo.h
 SOURCES += ../../../src/fileinfo.cpp
 HEADERS += ../../../src/stringhelper.h
 SOURCES += ../../../src/stringhelper.cpp
+HEADERS += ../../../src/systemdetection.h

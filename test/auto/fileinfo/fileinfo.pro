@@ -7,3 +7,4 @@ SOURCES     += tst_fileinfo.cpp
 # Dependancies:
 HEADERS += ../../../src/fileinfo.h
 SOURCES += ../../../src/fileinfo.cpp
+HEADERS += ../../../src/systemdetection.h

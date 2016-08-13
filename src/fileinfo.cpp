@@ -15,11 +15,12 @@
  */
 #include "fileinfo.h"
 
+#include "systemdetection.h"
+
 #include <string>
 #include <vector>
 
 using namespace std;
-
 
 /******************************************************************************
  ******************************************************************************/
@@ -180,9 +181,9 @@ std::string FileInfo::concat(const std::string &var1, const std::string &var2)
  */
 inline char FileInfo::separator()
 {
-#if defined(WIN32)
+#if defined(Q_OS_WIN)
     return '\\';
-#else
+#elif defined(Q_OS_UNIX)
     return '/';
 #endif
 }
@@ -204,7 +205,7 @@ inline char FileInfo::separator()
  */
 inline std::string FileInfo::toNativeSeparators(const std::string &pathName)
 {
-#if defined(WIN32)
+#if defined(Q_OS_WIN)
     string n(pathName);
     char * const data = const_cast<char *>(n.data());
     for (string::size_type i = 0; i < n.length(); ++i) {
@@ -230,7 +231,7 @@ inline std::string FileInfo::toNativeSeparators(const std::string &pathName)
  */
 inline std::string FileInfo::fromNativeSeparators(const std::string &pathName)
 {
-#if defined(WIN32)
+#if defined(Q_OS_WIN)
     string n(pathName);
     char * const data = const_cast<char *>(n.data());
     for (string::size_type i = 0; i < n.length(); ++i) {

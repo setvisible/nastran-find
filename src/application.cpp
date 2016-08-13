@@ -17,15 +17,16 @@
 
 #include "global.h"
 #include "stringhelper.h"
+#include "systemdetection.h"
 
 #include <curses.h>
 #include <iostream> // cout
 #include <stdio.h>
 #include <stdlib.h>
 
-#ifdef WIN32
+#if defined(Q_OS_WIN)
 #include <windows.h>
-#else
+#elif defined(Q_OS_UNIX)
 #include <limits.h>
 #endif
 
@@ -121,11 +122,11 @@ void Application::resetConfig()
 // Remark: 'filename' can be absolute, canonical or relative...
 void Application::setFilename(const string &filename)
 {
-#ifdef WIN32
+#if defined(Q_OS_WIN)
     char fullFilename[MAX_PATH];
     GetFullPathNameA(filename.c_str(), MAX_PATH, fullFilename, NULL);
     m_fullFileName = fullFilename;
-#else
+#elif defined(Q_OS_UNIX)
     char full_path[PATH_MAX];
     realpath(filename.c_str(), full_path);
     m_fullFileName = full_path;

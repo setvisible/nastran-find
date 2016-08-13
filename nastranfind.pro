@@ -52,6 +52,7 @@ HEADERS  += \
     $$PWD/src/fileinfo.h \
     $$PWD/src/recentfile.h \
     $$PWD/src/stringhelper.h \
+    $$PWD/src/systemdetection.h \
     $$PWD/src/version.h
 
 SOURCES += \
