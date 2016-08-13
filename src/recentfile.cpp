@@ -81,7 +81,7 @@ bool RecentFile::read()
         }
         infile.close();
     } else {
-        cout << "Unable to open file: " << str_config_filename << endl;
+        cout << "Config file '" << str_config_filename << "' not found." << endl;
         return false;
     }
     return true;
@@ -96,7 +96,7 @@ bool RecentFile::write()
         }
         outfile.close();
     } else {
-        cout << "Unable to open file: " << str_config_filename << endl;
+        cout << "Warning: Cannot write in config file '" << str_config_filename << "'." << endl;
         return false;
     }
     return true;

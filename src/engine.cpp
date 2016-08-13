@@ -134,6 +134,7 @@ void Engine::find(istream * const iodevice,
 string Engine::searchInclude(const string &text)
 {
     string ret;
+    /// \todo UNIX : reimplement regex if GCC < 4.9 ?
     regex patternInclude {R"(^INCLUDE\s+['"]([^'"]*)['"].*$)", regex::icase};
     smatch matches;
     bool found = regex_match(text, matches, patternInclude);
@@ -153,6 +154,7 @@ string Engine::searchIncludeMulti(const string &text,
 {
     string ret;
 
+    /// \todo UNIX : reimplement regex if GCC < 4.9 ?
     regex patternIncludeBegin {R"(^INCLUDE\s+['"]([^'"]*)$)", regex::icase};
     regex patternIncludeEnd   {R"(^([^'"]*)['"].*$)", regex::icase};
 

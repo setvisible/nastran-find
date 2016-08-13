@@ -74,15 +74,16 @@ std::string FileInfo::fileName(const std::string &fullFileName)
  */
 std::string FileInfo::canonicalFilePath(const std::string &fullFileName)
 {
-    string _filename = FileInfo::fromNativeSeparators(fullFileName);
-
     if (fullFileName.empty()) {
         return std::string();
     }
 
-    if (fullFileName.size() > 0 &&
-            ( fullFileName[fullFileName.size()-1] == '/' ||
-              fullFileName[fullFileName.size()-1] == '\\' ) ) {
+    if( isRelativePath(fullFileName) ){
+        return std::string();
+    }
+
+    if( fullFileName[fullFileName.size()-1] == '/' ||
+            fullFileName[fullFileName.size()-1] == '\\' ){
         return std::string();
     }
 

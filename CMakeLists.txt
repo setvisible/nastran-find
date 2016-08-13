@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
 project(nastranfind)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -7,13 +7,17 @@ set(CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE ON)
 
 set(MY_SOURCES
     ./src/global.h
-    ./src/stringhelper.h
     ./src/application.h
     ./src/application.cpp
     ./src/engine.h
     ./src/engine.cpp
+    ./src/fileinfo.h
+    ./src/fileinfo.cpp
     ./src/recentfile.h
     ./src/recentfile.cpp
+    ./src/stringhelper.h
+    ./src/stringhelper.cpp
+    ./src/version.h
     ./src/main.cpp
     )
 

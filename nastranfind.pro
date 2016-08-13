@@ -19,6 +19,7 @@ CONFIG -= file_copies copy_dir_files
 CONFIG -= incremental_off
 CONFIG -= depend_includepath
 CONFIG -= windows # BUG: 'windows' prevents std::cout to write in the console.
+CONFIG += c++11
 
 #message($${CONFIG})
 
@@ -121,8 +122,8 @@ unix {
     #-------------------------------------------------
     # NCurses
     #-------------------------------------------------
+    LIBS += -lncurses
 
-    # TODO
 }
 
 

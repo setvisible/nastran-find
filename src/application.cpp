@@ -19,11 +19,14 @@
 #include "stringhelper.h"
 
 #include <curses.h>
-#include <stdio.h>
 #include <iostream> // cout
+#include <stdio.h>
+#include <stdlib.h>
 
 #ifdef WIN32
 #include <windows.h>
+#else
+#include <limits.h>
 #endif
 
 using namespace std;
@@ -70,7 +73,7 @@ void Application::initialize()
     if( has_colors() == FALSE ){  // Curses: terminal does not support color
         endwin(); // Curses: exit curses
         cout << STR_ERR_NO_COLORS << endl;
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     start_color();
 
@@ -86,20 +89,20 @@ void Application::initialize()
 #endif
 
     /*         id color                     foreground     background   */
-    init_pair( Color::NORMAL,               COLOR_WHITE,   COLOR_BLACK);
-    init_pair( Color::TITLE,                COLOR_BLACK,   COLOR_GREEN);
-    init_pair( Color::SEARCHBOX,            COLOR_GREEN,   COLOR_BLACK);
-    init_pair( Color::FILENAME,             COLOR_YELLOW,  COLOR_BLACK);
-    init_pair( Color::LINE_NUMBER,          COLOR_CYAN,    COLOR_BLACK);
-    init_pair( Color::OCCURENCE,            COLOR_BLACK,   COLOR_YELLOW);
-    init_pair( Color::ERROR_MESSAGE,        COLOR_BLACK,   COLOR_RED);
-    init_pair( Color::NASTRAN_CARD,         COLOR_YELLOW,  COLOR_BLACK);
-    init_pair( Color::NASTRAN_COMMENT,      COLOR_GREEN,   COLOR_BLACK);
-    init_pair( Color::NASTRAN_DIGIT,        COLOR_RED,     COLOR_BLACK);
-    init_pair( Color::NASTRAN_QUOTE,        COLOR_CYAN,    COLOR_BLACK);
-    init_pair( Color::NASTRAN_SYMBOL,       COLOR_RED,     COLOR_BLACK);
+    init_pair( NORMAL,               COLOR_WHITE,   COLOR_BLACK);
+    init_pair( TITLE,                COLOR_BLACK,   COLOR_GREEN);
+    init_pair( SEARCHBOX,            COLOR_GREEN,   COLOR_BLACK);
+    init_pair( FILENAME,             COLOR_YELLOW,  COLOR_BLACK);
+    init_pair( LINE_NUMBER,          COLOR_CYAN,    COLOR_BLACK);
+    init_pair( OCCURENCE,            COLOR_BLACK,   COLOR_YELLOW);
+    init_pair( ERROR_MESSAGE,        COLOR_BLACK,   COLOR_RED);
+    init_pair( NASTRAN_CARD,         COLOR_YELLOW,  COLOR_BLACK);
+    init_pair( NASTRAN_COMMENT,      COLOR_GREEN,   COLOR_BLACK);
+    init_pair( NASTRAN_DIGIT,        COLOR_RED,     COLOR_BLACK);
+    init_pair( NASTRAN_QUOTE,        COLOR_CYAN,    COLOR_BLACK);
+    init_pair( NASTRAN_SYMBOL,       COLOR_RED,     COLOR_BLACK);
 
-    attrset(COLOR_PAIR(Color::NORMAL));
+    attrset(COLOR_PAIR(NORMAL));
     keypad(stdscr, TRUE); // Curses: enables special keys F1, F2 etc..
 
     mousemask( ALL_MOUSE_EVENTS, NULL);
@@ -120,10 +123,12 @@ void Application::setFilename(const string &filename)
 {
 #ifdef WIN32
     char fullFilename[MAX_PATH];
-    GetFullPathNameA(filename.c_str(), MAX_PATH, fullFilename, 0);
+    GetFullPathNameA(filename.c_str(), MAX_PATH, fullFilename, NULL);
     m_fullFileName = fullFilename;
 #else
-    /// \todo to do
+    char full_path[PATH_MAX];
+    realpath(filename.c_str(), full_path);
+    m_fullFileName = full_path;
 #endif
     m_recentFile.prepend(m_fullFileName);
 }
@@ -171,7 +176,7 @@ int Application::exec()
             move(3,9);
             echo();
 
-            colorize(Color::SEARCHBOX);
+            colorize(SEARCHBOX);
             char buffer[C_SEARCH_SIZE];
             getnstr( buffer, sizeof(buffer) - 1 ); // Curses: get a length-fixed input
             uncolorize();
@@ -273,7 +278,7 @@ void Application::showTitle()
     /* Title */
     move(m_rowTitleBox,0);
 
-    colorize(Color::TITLE);
+    colorize(TITLE);
     printw( C_APPLICATION_NAME );
     uncolorize();
 
@@ -287,7 +292,7 @@ void Application::showTitle()
     move(m_rowTitleBox+3,0);
     printw( "Search: <" );
 
-    colorize(Color::SEARCHBOX);
+    colorize(SEARCHBOX);
     if( m_searchedText.empty() ){
         printw( "---search field empty---" );
     }else{
@@ -332,7 +337,7 @@ void Application::showResults()
         ++first_page_shown;
         if(first_page_shown >= m_currentScroll && row < m_rowErrorBox) {
             move(row,0);
-            colorize(Color::FILENAME);
+            colorize(FILENAME);
             printw( "--- %s ---", file.c_str() );
             uncolorize();
             ++row;
@@ -393,7 +398,7 @@ void Application::printwSyntaxColoration(const string &text, const int row )
         /* ***************************** */
         /* Filename                      */
         /* ***************************** */
-        colorize(Color::FILENAME);
+        colorize(FILENAME);
         printw( "%s", text.c_str() );
         uncolorize();
 
@@ -401,7 +406,7 @@ void Application::printwSyntaxColoration(const string &text, const int row )
         /* ***************************** */
         /* Error Message                 */
         /* ***************************** */
-        colorize(Color::ERROR_MESSAGE);
+        colorize(ERROR_MESSAGE);
         printw( "%s", text.c_str() );
         uncolorize();
 
@@ -409,7 +414,7 @@ void Application::printwSyntaxColoration(const string &text, const int row )
         /* ***************************** */
         /* Results                       */
         /* ***************************** */
-        colorize(Color::LINE_NUMBER);
+        colorize(LINE_NUMBER);
         printw( "%s", text.substr(0, C_LINE_NUMBER_WIDTH).c_str() );
         uncolorize();
 
@@ -423,7 +428,7 @@ void Application::printwSyntaxColoration(const string &text, const int row )
             char ch = (*p);
             switch(ch) {
             case '$':
-                colorize(Color::NASTRAN_COMMENT);
+                colorize(NASTRAN_COMMENT);
                 printw( "%s", p);
                 uncolorize();
                 p = text.end();
@@ -444,7 +449,7 @@ void Application::printwSyntaxColoration(const string &text, const int row )
 
                     /* Deck Card */
                     type = SYMBOL_ALPHA;
-                    colorize(Color::NASTRAN_CARD);
+                    colorize(NASTRAN_CARD);
                     printw( "%c", ch );
                     uncolorize();
 
@@ -453,7 +458,7 @@ void Application::printwSyntaxColoration(const string &text, const int row )
 
                     /* Digit 0..9 */
                     type = SYMBOL_DIGIT;
-                    colorize(Color::NASTRAN_DIGIT);
+                    colorize(NASTRAN_DIGIT);
                     printw( "%c", ch );
                     uncolorize();
 
@@ -462,13 +467,13 @@ void Application::printwSyntaxColoration(const string &text, const int row )
 
                     /* Quotes text */
                     type = SYMBOL_QUOTE;
-                    colorize(Color::NASTRAN_QUOTE);
+                    colorize(NASTRAN_QUOTE);
                     printw( "%c", ch );
                     uncolorize();
 
                 } else {
                     /* Other char like +, ., etc. */
-                    colorize(Color::NASTRAN_SYMBOL);
+                    colorize(NASTRAN_SYMBOL);
                     printw( "%c", ch );
                     uncolorize();
                 }
@@ -525,7 +530,7 @@ void Application::showErrors()
         const string error_msg = m_engine.errorAt(i);
 
         move(m_rowErrorBox + row, 0);
-        colorize(Color::ERROR_MESSAGE);
+        colorize(ERROR_MESSAGE);
         printw( "/!\\:%s", error_msg.c_str() );
         uncolorize();
         ++row;

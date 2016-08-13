@@ -30,6 +30,9 @@ Install PDCurses:
 
 ## Compilation
 
+First download `nastranfind-src.tar.gz`
+
+
 ### Build with Qt
 
 Compile and run `nastranfind.pro`.
@@ -39,6 +42,8 @@ Compile and run `nastranfind.pro`.
 
 On Linux / Mac OS X 
 
+    tar zxvf nastranfind-src.tar.gz
+    cd nastranfind-src
     mkdir -p build
     cd build
     cmake ..
@@ -46,12 +51,13 @@ On Linux / Mac OS X
 
 On Windows
 
+    tar zxvf nastranfind-src.tar.gz
+    cd nastranfind-src
     mkdir -p build
     cd build
-    "c:\Program Files\CMake\bin\cmake" ..
+    "C:\Program Files\CMake\bin\cmake.exe" ..
     start .
     REM Double click the Visual Studio project
-
 
 
 ## Usage

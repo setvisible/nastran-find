@@ -51,5 +51,12 @@ The work-around is to delete this key *manually*.
 Wrong position of occurence textboxes when the line contains tab char.
 
 
+### [BUG004] GCC regex fails on Linux
+
+The class Engine uses the <regex> GCC module --> test fails on Linux.
+
+    throw_regex_error(regex_constants::error_escape)
+
+
 
 

@@ -30,7 +30,7 @@ using namespace std;
  */
 char* StringHelper::strrspn( const char* s, const char* delimiters )
 {
-    char* p = strchr( s, '\0' );
+    char* p = (char*)strchr( s, '\0' );
     while (p-- != s)
         if (!strchr( delimiters, *p ))
             break;
