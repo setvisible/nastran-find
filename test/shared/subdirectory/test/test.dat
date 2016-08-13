@@ -1,0 +1,14 @@
+$
+$ Test when includes are in other directories
+$
+$ Children directories
+INCLUDE 'bulk/included_1.dat'
+
+INCLUDE './bulk/included_2.dat'
+
+$
+$ Parents directories
+INCLUDE '../bulk/included_A.dat'
+
+INCLUDE './../bulk/included_B.dat'
+

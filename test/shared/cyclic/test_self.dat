@@ -1,0 +1,4 @@
+$
+$ Self-inclusion
+$
+INCLUDE 'test_self.dat'

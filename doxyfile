@@ -22,5 +22,3 @@ EXCLUDE_PATTERNS       = */test/* \
                          */tests/* \
                          */temp/* \
                          */tempo/*
-
-

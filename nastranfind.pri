@@ -74,7 +74,7 @@ isEmpty(NF_BUILD_TREE) {
 }
 NF_APP_PATH = $$NF_BUILD_TREE/bin
 macx {
-    NF_APP_TARGET   = "DatFind"
+    NF_APP_TARGET   = "NastranFind"
     NF_LIBRARY_PATH = $$NF_APP_PATH/$${NF_APP_TARGET}.app/Contents/PlugIns
     NF_PLUGIN_PATH  = $$NF_APP_PATH/$${NF_APP_TARGET}.app/Contents/PlugIns
     NF_DATA_PATH    = $$NF_APP_PATH/$${NF_APP_TARGET}.app/Contents/Resources
@@ -91,7 +91,7 @@ macx {
     }
 } else {
     contains(TEMPLATE, vc.*):vcproj = 1
-    NF_APP_TARGET   = datfind
+    NF_APP_TARGET   = nastranfind
     NF_LIBRARY_PATH = $$NF_BUILD_TREE/lib/
     NF_PLUGIN_PATH  = $$NF_BUILD_TREE/lib/plugins
     NF_DATA_PATH    = $$NF_BUILD_TREE/share

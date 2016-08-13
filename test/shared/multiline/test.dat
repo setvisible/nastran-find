@@ -1,0 +1,32 @@
+$
+$ 
+INCLUDE './path/to/included_A.dat'
+$
+$
+$ long path
+INCLUDE './path/to/../../path/to/../../path/to/../../path/to/included_B.dat'
+$
+$
+$ 2 lines
+INCLUDE './path/
+to/included_C.dat'
+$
+$
+$ More than 2 lines with split of the filename
+INCLUDE './path
+/to/
+incl
+uded_D
+.dat'
+$
+$
+$ starts and ends with CR/LF
+INCLUDE '
+
+./
+
+path/
+to/
+included_E.dat
+
+'

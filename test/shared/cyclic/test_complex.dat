@@ -1,0 +1,6 @@
+$
+$ Cyclic
+$
+$ test.dat > included_A.dat > included_B.dat > included_C.dat > included_A.dat > ...
+$
+INCLUDE 'included_A.dat'

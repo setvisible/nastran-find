@@ -1,0 +1,12 @@
+$
+$ Broken links
+$
+INCLUDE 'not_existing_file.dat'
+
+$
+$ Wrong path separator '\'. The correct one is '/'.
+$ However we consider it compliant for NastranFind, 
+$ even if not for Nastran.
+$
+INCLUDE '.\broken.dat'
+

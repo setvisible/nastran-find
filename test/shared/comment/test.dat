@@ -1,0 +1,5 @@
+$
+$ Include line contains an ending comment with a quote
+$
+INCLUDE "include.dat" $ "
+

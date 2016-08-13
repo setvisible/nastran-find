@@ -1,0 +1,18 @@
+
+$ Path with whitespaces 
+$
+
+$ Simple quotes
+INCLUDE './path to/include 001.dat'
+INCLUDE './path to/
+include
+ 002.dat'
+
+
+$ Double quotes
+INCLUDE "./path to/include 003.dat"
+INCLUDE "./path to/
+include
+ 004.dat"
+
+ 

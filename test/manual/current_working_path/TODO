@@ -1,0 +1,20 @@
+
+XXX TODO make this test automatic
+
+void tst_Engine::test_current_working_path()
+{
+   // Given, When
+    Engine engine;
+    engine.setCurrentWorkingPath( QFINDTESTDATA("share/current_working_path").toLatin1().data() );
+    std::string filename = "./model/test.dat";
+    engine.find(filename, "");
+
+    // Then
+    QCOMPARE( engine.errorCount(), 0);
+
+    QCOMPARE( engine.linkCount(), 2);
+    QCOMPARE( engine.linkAt(0), "./model/test.dat");  // Note the relative path
+    QCOMPARE( engine.linkAt(0), "./model/included.dat");
+
+}
+

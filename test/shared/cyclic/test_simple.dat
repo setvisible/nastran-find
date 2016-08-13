@@ -1,0 +1,6 @@
+$
+$ Cyclic
+$
+$ test_simple.dat > included_simple.dat > test_simple.dat >  included_simple.dat > ...
+$
+INCLUDE 'included_simple.dat'

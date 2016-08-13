@@ -1,0 +1,22 @@
+$
+$ Line return = Linux LF
+$
+$ UPPER CASE
+INCLUDE "included_A.dat"
+$
+$ lower case
+include "included_B.dat"
+$
+$ miXED caSE
+incLUDE "./included_C.dat"
+$
+$
+$ many spaces between
+$       $       $       $       $       $       $       $       $       $       $80
+INCLUDE                                                       "./included_D.dat"
+$
+$
+$ Tab char
+INCLUDE	"./included_E.dat"
+$
+

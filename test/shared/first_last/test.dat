@@ -1,0 +1,6 @@
+INCLUDE "first_line_include.dat"
+$ Include at the start of the file
+
+$ Include at the end of the file
+$ Remark: neither CR nor LF after the last quote.
+INCLUDE "last_line_include.dat"

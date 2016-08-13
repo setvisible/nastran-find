@@ -20,7 +20,7 @@ CONFIG -= incremental_off
 CONFIG -= depend_includepath
 CONFIG -= windows # BUG: 'windows' prevents std::cout to write in the console.
 
-message($${CONFIG})
+#message($${CONFIG})
 
 LANGUAGE = C++
 
@@ -47,21 +47,23 @@ build_pass:CONFIG(debug, debug|release) {
 HEADERS  += \
     $$PWD/src/global.h \
     $$PWD/src/application.h \
+    $$PWD/src/engine.h \
+    $$PWD/src/fileinfo.h \
     $$PWD/src/recentfile.h \
     $$PWD/src/stringhelper.h \
-    $$PWD/src/engine.h
+    $$PWD/src/version.h
 
 SOURCES += \
     $$PWD/src/main.cpp\
     $$PWD/src/application.cpp \
+    $$PWD/src/engine.cpp \
+    $$PWD/src/fileinfo.cpp \
     $$PWD/src/recentfile.cpp \
-    $$PWD/src/engine.cpp
+    $$PWD/src/stringhelper.cpp
 
 OTHER_FILES += \
-    $$PWD/BUGS \
-    $$PWD/INSTALL \
-    $$PWD/LICENSE \
-    $$PWD/README.md
+    $$PWD/README.md \
+    $$PWD/TROUBLESHOOTING.md
 
 #-------------------------------------------------
 # ICONS

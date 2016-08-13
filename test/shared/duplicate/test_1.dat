@@ -1,0 +1,9 @@
+$
+$ Duplicates
+$
+INCLUDE 'included.dat'
+$
+$
+$ Same include called 2 times from the same file
+INCLUDE 'included.dat'
+
