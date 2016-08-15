@@ -19,17 +19,21 @@
 #include "fileinfo.h"
 #include "stringhelper.h"
 
-#include <algorithm> // fill()
+#include <algorithm> // transform(), powl()
 #include <fstream>
-#include <istream>
 #include <stdio.h>
-#include <regex>
+#if defined(Q_OS_UNIX)
+#include <limits.h>
+#endif
 
 using namespace std;
 
 /*! \class Engine
  *  \brief The class Engine is a search engine for finding occurences
  *         through a INCLUDE file tree.
+ */
+
+/*! \brief Constructor.
  */
 Engine::Engine()
 {
@@ -79,7 +83,9 @@ void Engine::find(const string &fullFileName, const string &searchedText )
             current_fullfilename = currentFileName;
         }
 
-        ifstream infile( current_fullfilename.c_str() );
+        /* std::ios::binary is needed for using tellg() and seekg() correctly.  */
+        /* Sadly, \r\n is considered now as two characters.                     */
+        ifstream infile( current_fullfilename.c_str(), std::ios::in | std::ios::binary );
         if( !infile.is_open() ){
 
             string error_msg;
@@ -105,85 +111,82 @@ void Engine::find(istream * const iodevice,
     int currentLineNumber = 0;
     string line;
 
-    /* **************************** */
-    /* For each line in the file    */
-    /* **************************** */
-    while (getline( (*iodevice), line )) {  // while not a EOF char
-
-        ++currentLineNumber;
+    do {
         searchText(line, searchedText, currentFileName, currentLineNumber);
+        ++currentLineNumber;
 
-        string childFileName = searchInclude(line);
-        if( childFileName.empty() ){
-            childFileName = searchIncludeMulti( line,
-                                                &currentLineNumber,
-                                                currentFileName,
-                                                searchedText,
-                                                iodevice );
-        }
+        string childFileName = searchInclude(iodevice);
 
         if( !childFileName.empty() ){
             appendFileName(childFileName, currentFileName, currentLineNumber);
         }
-    }
+    } while( std::getline((*iodevice), line) );
 }
 
 
 /******************************************************************************
  ******************************************************************************/
-string Engine::searchInclude(const string &text)
+/*! \brief Return the filepath of the 'INCLUDE' statement, if the
+ *         given \a text is an 'INCLUDE' statement.
+ * Otherwise returns an empty string.
+ *
+ * If the 'INCLUDE' statement is declared over several lines, the function
+ * returns the entire filepath without the line breaks.
+ */
+string Engine::searchInclude(istream * const iodevice)
 {
-    string ret;
-    /// \todo UNIX : reimplement regex if GCC < 4.9 ?
-    regex patternInclude {R"(^INCLUDE\s+['"]([^'"]*)['"].*$)", regex::icase};
-    smatch matches;
-    bool found = regex_match(text, matches, patternInclude);
-    if (found) {
-        ret = matches[1];
-    }
-    return ret;
-}
+    const streampos oldpos = iodevice->tellg();  // stores the position
 
-/******************************************************************************
- ******************************************************************************/
-string Engine::searchIncludeMulti(const string &text,
-                                  int * const currentLineNumber,
-                                  const string &currentFileName,
-                                  const string &searchedText,
-                                  istream * const iodevice )
-{
-    string ret;
+    {
+        std::string keyword( 7, '\0');
+        iodevice->read(&keyword[0], 7 );
 
-    /// \todo UNIX : reimplement regex if GCC < 4.9 ?
-    regex patternIncludeBegin {R"(^INCLUDE\s+['"]([^'"]*)$)", regex::icase};
-    regex patternIncludeEnd   {R"(^([^'"]*)['"].*$)", regex::icase};
-
-    smatch matches;
-    bool found = regex_match(text, matches, patternIncludeBegin);
-    if (found) {
-        ret = matches[1];
-
-        /* continue reading until reaching the next ' or " */
-        found = false;
-        string line;
-        while( !found && getline( (*iodevice), line) ){
-
-            ++(*currentLineNumber);
-            searchText(line, searchedText, currentFileName, (*currentLineNumber));
-
-            found = regex_match(line, matches, patternIncludeEnd);
-            if (found) {
-                ret += matches[1];
-            }else{
-                ret += line;
-            }
+        std::transform( keyword.begin(), keyword.end(), keyword.begin(), ::toupper );
+        if( keyword != "INCLUDE" ) {
+            iodevice->clear();
+            iodevice->seekg(oldpos);
+            return string();
         }
-
     }
-    return ret;
+
+    /* Magic Number 10:                                           */
+    /*  -> increases buffer to store quotes and trimming space(s) */
+    std::string text(PATH_MAX + 10, '\0');
+    iodevice->read( &text[0], text.length() );
+    iodevice->clear();
+    iodevice->seekg(oldpos);
+
+    /* Remove all the CR and LF */
+    StringHelper::removeCharsFromString( text, "\r\n" );
+
+    auto p = text.begin(); // + 7;
+
+    /* The first char must be a white space */
+    if ( (*p) != ' ' && (*p) != '\t')
+        return string();
+
+    while( ((*p) == ' ' || (*p) == '\t') && p != text.end() ){
+        ++p;
+    }
+
+    if( ((*p) == '\'' || (*p) == '\"') && p != text.end() ) {
+        /* Read the buffer until reaching the ending quote */
+        auto quoteBegin = p;
+        ++p;
+        auto pos = p;
+        auto len = 0;
+        while( p != text.end() ){
+            if( (*p) == (*quoteBegin) ){
+                string ret = text.substr(pos - text.begin(), len);
+                return ret;
+            }
+            ++len;
+            ++p;
+        }
+        /* At this point, the ending quote was not found */
+    }
+    return string();
 }
-
-
 
 /******************************************************************************
  ******************************************************************************/
@@ -194,6 +197,9 @@ void Engine::searchText(const string &text,
                         const string &currentFileName,
                         const int currentLineNumber)
 {
+    if( currentLineNumber < 1)
+        return;
+
     if( !searchedText.empty() && !currentFileName.empty()) {
 
         /* Remark : RegExp is not used here, to avoid unwanted RegExp injection */

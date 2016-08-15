@@ -24,6 +24,10 @@ namespace {
 static const char str_config_filename[] = ".nastranfind";
 }
 
+/*! \class RecentFile
+ *  \brief The class RecentFile manages the recent files for the application.
+ */
+
 RecentFile::RecentFile()
 {
     read();

@@ -16,19 +16,37 @@
 
 #include "stringhelper.h"
 
+#include <algorithm>
 #include <string>
 #include <cstring>
 
 using namespace std;
 
+/******************************************************************************
+ ******************************************************************************/
+/*! \brief Remove all the given \a charsToRemove from the given \a text.
+ *
+ * \code
+ * std::string str("(555) 555-5555");
+ * removeCharsFromString( str, "()-" );   // str == "555 5555555"
+ * \endcode
+ */
+void StringHelper::removeCharsFromString( string &text, const string &charsToRemove )
+{
+   for ( unsigned int i = 0; i < charsToRemove.length(); ++i ) {
+      text.erase( std::remove(text.begin(), text.end(), charsToRemove.at(i)), text.end() );
+      text.resize( strlen( text.c_str() ) );
+   }
+}
 
+/******************************************************************************
+ ******************************************************************************/
 #ifndef STRRSPN
-
 /*! \brief A non-standard helper function
  *  Find c such that s=".*c[d]*", where [d]=delimiters and c in [d].
  *  If c is not found, it returns the argument s.
  */
-char* StringHelper::strrspn( const char* s, const char* delimiters )
+static char* strrspn( const char* s, const char* delimiters )
 {
     char* p = (char*)strchr( s, '\0' );
     while (p-- != s)

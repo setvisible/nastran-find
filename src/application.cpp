@@ -35,8 +35,12 @@ using namespace std;
 static const char STR_ERR_NO_COLORS[]  = "Error: terminal does not support color";
 static const char STR_NO_RESULT[]      = "(no results)";
 
-/******************************************************************************
- ******************************************************************************/
+/*! \class Application
+ *  \brief The class Application represents the main window.
+ */
+
+/*! \brief Constructor.
+ */
 Application::Application( int argc, char *argv[] )
     : m_mode(MODE_BROWSE)
     , m_fullFileName("~~~unknown file~~~")
@@ -122,15 +126,13 @@ void Application::resetConfig()
 // Remark: 'filename' can be absolute, canonical or relative...
 void Application::setFilename(const string &filename)
 {
+    char fullFilename[PATH_MAX];
 #if defined(Q_OS_WIN)
-    char fullFilename[MAX_PATH];
-    GetFullPathNameA(filename.c_str(), MAX_PATH, fullFilename, NULL);
-    m_fullFileName = fullFilename;
+    GetFullPathNameA(filename.c_str(), PATH_MAX, fullFilename, NULL);
 #elif defined(Q_OS_UNIX)
-    char full_path[PATH_MAX];
-    realpath(filename.c_str(), full_path);
-    m_fullFileName = full_path;
+    realpath(filename.c_str(), fullFilename);
 #endif
+    m_fullFileName = fullFilename;
     m_recentFile.prepend(m_fullFileName);
 }
 

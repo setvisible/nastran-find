@@ -18,7 +18,7 @@
 
 #include "../../../src/engine.h"
 
-#include <sstream> // for std::istringstream
+#include <sstream> // std::istringstream
 
 class tst_Search : public QObject
 {
@@ -33,8 +33,6 @@ private slots:
     void test_find_two_occurences_on_same_line();
 
 };
-
-// class EngineFriend : Engine { friend class tst_Search; };
 
 
 /******************************************************************************

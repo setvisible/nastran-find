@@ -18,6 +18,8 @@
 
 #include "../../../src/engine.h"
 
+#include <sstream> // std::istringstream
+
 class tst_Engine : public QObject
 {
     Q_OBJECT
@@ -25,9 +27,6 @@ class tst_Engine : public QObject
 private slots:
     void test_searchInclude();
     void test_searchInclude_data();
-
-    void test_searchIncludeMulti();
-    void test_searchIncludeMulti_data();
 
 };
 
@@ -39,6 +38,9 @@ void tst_Engine::test_searchInclude_data()
 {
     QTest::addColumn<QString>("text");
     QTest::addColumn<QString>("expected");
+
+
+    /* ------------------------- Single line ------------------------- */
 
     QTest::newRow("test_1001") << "INCLUDE 'Test'"            << "Test" ;
     QTest::newRow("test_1002") << "INCLUDE         'Test'"    << "Test" ;
@@ -71,19 +73,83 @@ void tst_Engine::test_searchInclude_data()
     QTest::newRow("test_3002") << "include 'Test $comment'"     << "Test $comment" ;
     QTest::newRow("test_3003") << "include 'Test' blah"         << "Test" ;
     QTest::newRow("test_3004") << "include \"Test\" blah"       << "Test" ;
-    QTest::newRow("test_3005") << "include 'this is a very very very very very very very long line that have more than 80 characters !'"
-                               << "this is a very very very very very very very long line that have more than 80 characters !" ;
+    QTest::newRow("test_3005") << "include 'this is a very very very very very very very "
+                                  "long line that have more than 80 characters !'"
+                               << "this is a very very very very very very very "
+                                  "long line that have more than 80 characters !" ;
+    QTest::newRow("test_3006") << "include 'this is a very "
+                                  "very very very very very very very very very very "
+                                  "very very very very very very very very very very " // 100
+                                  "very very very very very very very very very very "
+                                  "very very very very very very very very very very " // 200
+                                  "long line with exactly 260 char and not more!'"
+                               << "this is a very "
+                                  "very very very very very very very very very very "
+                                  "very very very very very very very very very very " // 100
+                                  "very very very very very very very very very very "
+                                  "very very very very very very very very very very " // 200
+                                  "long line with exactly 260 char and not more!" ;
+
 
     QTest::newRow("test_4001") << "include 'a lot' of q'uotes'"     << "a lot" ;
     QTest::newRow("test_4002") << "include \"a lot\" of q\"uotes\"" << "a lot" ;
     QTest::newRow("test_4003") << "include 'a lot\" of q'uotes\""   << "a lot\" of q" ;
 
-    QTest::newRow("test_5001") << "INCLUDE"                 << "" ;
-    QTest::newRow("test_5001") << "INCLUDE     "            << "" ;
-    QTest::newRow("test_5001") << "INCLUDE ''"              << "" ;
-    QTest::newRow("test_5002") << "INCLUDE \"\""            << "" ;
-    QTest::newRow("test_5003") << "INCLUDE '\""             << "" ;
-    QTest::newRow("test_5004") << "INCLUDE \"'"             << "" ;
+    QTest::newRow("test_5001") << "INCLUDE"       << "" ;
+    QTest::newRow("test_5001") << "INCLUDE     "  << "" ;
+    QTest::newRow("test_5001") << "INCLUDE ''"    << "" ;
+    QTest::newRow("test_5002") << "INCLUDE \"\""  << "" ;
+    QTest::newRow("test_5003") << "INCLUDE '\""   << "" ;
+    QTest::newRow("test_5004") << "INCLUDE \"'"   << "" ;
+
+
+    /* -------------------------- Multiline ------------------------- */
+
+    /* -------------------------- Linux LF -------------------------- */
+    QTest::newRow("test_6001") << "INCLUDE 'Test\n"
+                                  ".dat'"
+                               << "Test.dat" ;
+
+    QTest::newRow("test_6002") << "INCLUDE 'path/\n"
+                                  "to/\n"
+                                  "file.dat\n'   $ blah ' "
+                               << "path/to/file.dat" ;
+
+    QTest::newRow("test_6003") << "INCLUDE '\n"
+                                  "path/\n"
+                                  "to/\n"
+                                  "file.dat\n'   $ blah ' "
+                               << "path/to/file.dat" ;
+
+
+    /* ------------------------- Windows CR+LF ----------------------- */
+    QTest::newRow("test_7001") << "INCLUDE 'Test\r\n"
+                                  ".dat'"
+                               << "Test.dat" ;
+
+    QTest::newRow("test_7003") << "INCLUDE 'path/\r\n"
+                                  "to/\r\n"
+                                  "file.dat\r\n'   $ blah ' "
+                               << "path/to/file.dat" ;
+
+    QTest::newRow("test_7004") << "INCLUDE '\r\n"
+                                  "path/\r\n"
+                                  "to/\r\n"
+                                  "file.dat\r\n'   $ blah ' "
+                               << "path/to/file.dat" ;
+
+
+    /* Wrong Quotes */
+    QTest::newRow("test_8001") << "INCLUDE '\r\n"
+                                  "path/\r\n"
+                                  "to/\r\n"
+                                  "file.dat\r\n   $ blah "
+                               << "" ;
+    QTest::newRow("test_8002") << "INCLUDE \r\n"
+                                  "path/\r\n"
+                                  "to/\r\n"
+                                  "file.dat\r\n''   $ blah "
+                               << "" ;
 
 }
 
@@ -91,32 +157,14 @@ void tst_Engine::test_searchInclude()
 {
     QFETCH(QString, text);
     QFETCH(QString, expected);
-    std::string _text = text.toStdString();
+    std::istringstream buffer( text.toLatin1().data() );
 
     EngineFriend engine;
-    std::string _actual = engine.searchInclude( _text );
+    std::string std_actual = engine.searchInclude( &buffer );
 
-    QString actual = QString::fromStdString( _actual );
+    QString actual = QString::fromStdString( std_actual );
 
     QCOMPARE(actual, expected);
-
-}
-
-/******************************************************************************
- ******************************************************************************/
-void tst_Engine::test_searchIncludeMulti_data()
-{
-    QTest::addColumn<QString>("text");
-    QTest::addColumn<QString>("expected");
-
-    QTest::newRow("test__1") << "" << "" ;
-
-}
-void tst_Engine::test_searchIncludeMulti()
-{
-    QFETCH(QString, text);
-    QFETCH(QString, expected);
-    std::string _text = text.toStdString();
 
 }
 
@@ -125,5 +173,5 @@ void tst_Engine::test_searchIncludeMulti()
 
 QTEST_APPLESS_MAIN(tst_Engine)
 
-#include "tst_engine-regex.moc"
+#include "tst_engine-include.moc"
 

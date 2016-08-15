@@ -25,10 +25,7 @@
 class StringHelper
 {
 public:
-
-#ifndef STRRSPN
-    static char* strrspn( const char* s, const char* delimiters );
-#endif
+    static void removeCharsFromString(std::string &text, const std::string &charsToRemove);
 
     static char* trim_right( char* s, const char* delimiters );
     static char* trim_left( char* s, const char* delimiters );

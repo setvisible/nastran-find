@@ -1,2 +1,2 @@
 TEMPLATE=subdirs
-SUBDIRS += engine engine-regex fileinfo search stringhelper
+SUBDIRS += engine engine-include fileinfo search stringhelper

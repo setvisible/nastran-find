@@ -317,7 +317,7 @@ void tst_Engine::test_quotes()
     QCOMPARE( engine.errorCount(), 0);
 
     std::string link0( "test.dat" );
-    std::string link1( "include.dat" );
+    std::string link1( "it's_quoted.dat" );
 
     QCOMPARE( engine.linkCount(), 2);
     QCOMPARE( engine.linkAt(0), link0);

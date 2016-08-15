@@ -33,7 +33,6 @@ static const char STR_ERR_QUOTE_END[]  = "'.";
 static const char STR_ERR_END[]        = ".";
 /* **************************************************************** */
 
-
 class Engine
 {
     typedef std::list<std::string> stringlist;
@@ -60,6 +59,14 @@ public:
     std::string resultAt(const std::string &filename, const int index) const;
 
 
+protected:
+    std::string searchInclude(std::istream * const iodevice);
+
+    void searchText(const std::string &text,
+                    const std::string &searchedText,
+                    const std::string &currentFileName,
+                    const int currentLineNumber);
+
 private:
     /* list of the filename + all included files */
     stringlist m_files;
@@ -70,23 +77,9 @@ private:
     /* map containing the occurences for each file */
     std::map<std::string, stringlist> m_results;
 
-    std::string searchInclude(const std::string &text);
-    std::string searchIncludeMulti(const std::string &text,
-                                   int * const currentLineNumber,
-                                   const std::string &currentFileName,
-                                   const std::string &searchedText,
-                                   std::istream * const iodevice);
-
-    void searchText(const std::string &text,
-                    const std::string &searchedText,
-                    const std::string &currentFileName,
-                    const int currentLineNumber);
-
-
     void appendFileName(const std::string &filenameToBeInserted,
                         const std::string &currentFileName,
                         const int currentLineNumber);
-
 
 };
 

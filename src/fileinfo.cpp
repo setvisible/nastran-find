@@ -22,6 +22,10 @@
 
 using namespace std;
 
+/*! \class FileInfo
+ *  \brief The class FileInfo contains helper methods for cross-plateform file info.
+ */
+
 /******************************************************************************
  ******************************************************************************/
 /*! \brief Returns the file name of the given \a fullFileName.

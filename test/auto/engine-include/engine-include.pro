@@ -1,8 +1,8 @@
 #isEmpty(TEMPLATE):TEMPLATE=app
-TARGET       = tst_engine-regex
+TARGET       = tst_engine-include
 CONFIG      += testcase
 QT           = core testlib
-SOURCES     += tst_engine-regex.cpp
+SOURCES     += tst_engine-include.cpp
 
 # Dependancies:
 HEADERS += ../../../src/engine.h
