@@ -18,6 +18,7 @@
 #include "global.h"
 #include "fileinfo.h"
 #include "stringhelper.h"
+#include "systemdetection.h"
 
 #include <algorithm> // transform(), powl()
 #include <fstream>

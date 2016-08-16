@@ -20,7 +20,7 @@
 #include "systemdetection.h"
 
 #include <curses.h>
-#include <iostream> // cout
+#include <iostream> // std::cout
 #include <stdio.h>
 #include <stdlib.h>
 

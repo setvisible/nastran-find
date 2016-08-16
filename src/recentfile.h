@@ -37,6 +37,7 @@ protected:
     bool write();
 
 private:
+    std::string m_configFullFilename;
     std::list<std::string> m_filenames;
 };
 
