@@ -6,7 +6,7 @@ Its core is developed in C++, based on the **Curses** library.
 
 ## Screenshots
 
-Main window, lookink for `123456` in the toyota yaris model. It found 8450 occurences :
+Main window, looking for `123456` in the toyota yaris model. It found 8447 occurences :
 
 ![](screenshots/find_yaris.png)
 
