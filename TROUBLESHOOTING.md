@@ -1,11 +1,13 @@
 TROUBLESHOOTING
 ===============
 
-## [RESOLVED] Application cannot be resized in PDCurses (BUG001)
+## [BUG001][RESOLVED] Application cannot be resized in PDCurses
+
+### Problem
 
 By default, PDCurses sets the application in a fixed-size window.
 
-**SOLUTION**
+### Solution
 
 Add the following variables,  before calling `initscr( )` or `Xinitscr( )`:
 
@@ -31,7 +33,9 @@ to
 The application is now resizable.
 
 
-### [BUG002] PDCurses bad settings storage (on Windows)
+## [BUG002] PDCurses bad settings storage (on Windows)
+
+### Problem
 
 On Windows, at close event, the position of the application's window is
 stored in the register:
@@ -45,18 +49,62 @@ Proposition for the correction: --resetConfig argument to delete the HKEY.
 
 The work-around is to delete this key *manually*.
 
+### Solution
 
-### [BUG003] PDCurses tabulation character  (tab char /t)
+\todo
+
+## [BUG003] PDCurses tabulation character  (tab char /t)
+
+### Problem
 
 Wrong position of occurence textboxes when the line contains tab char.
 
+### Solution
 
-### [BUG004] GCC regex fails on Linux
+\todo
 
-The class Engine uses the <regex> GCC module --> test fails on Linux.
+## [BUG004] GCC regex fails on Linux
+
+### Problem
+
+Regex doesn't as expected with GCC 4.9 :
 
     throw_regex_error(regex_constants::error_escape)
 
+### Solution
+
+\todo
+
+## [BUG005][RESOLVED]  Qt and NCurses
+
+### Problem
+
+When running the code with C++ and NCurses in QtCreator:
+
+    #include <ncurses.h>
+    int main()
+    {
+      initscr();// inicializa pantalla
+      printw("Hello world!");
+      refresh();
+      getch();
+      endwin();
+    }
+
+It says: 
+
+	Error opening terminal:unknown
+
+
+### Solution
+
+In QtCreator:
+
+Go to **Project** -> **Run settings** -> **Environment**
+
+1. Make sure "Run in Terminal" is checked.
+
+2. Add the `TERM` variable with `xterm` as value.
 
 
 

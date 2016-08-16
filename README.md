@@ -4,9 +4,16 @@ Nastranfind is a solution for browsing NASTRAN input deck files for Windows, Mac
 
 Its core is developed in C++, based on the **Curses** library. 
 
-## Prerequises
+## Screenshots
 
-On Linux / Mac OS X
+Main window, lookink for `123456` in the toyota yaris model. It found 8450 occurences :
+
+![](screenshots/find_yaris.png)
+
+
+## Dependencies
+
+### On Linux / Mac OS X
 
 Install NCurses:
 
@@ -18,7 +25,7 @@ Install NCurses:
 [http://www.gnu.org/software/ncurses/ncurses.html](http://www.gnu.org/software/ncurses/ncurses.html "http://www.gnu.org/software/ncurses/ncurses.html")
 
 
-On Windows
+### On Windows
 
 Install PDCurses:
 

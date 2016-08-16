@@ -130,7 +130,10 @@ void Application::setFilename(const string &filename)
 #if defined(Q_OS_WIN)
     GetFullPathNameA(filename.c_str(), PATH_MAX, fullFilename, NULL);
 #elif defined(Q_OS_UNIX)
-    realpath(filename.c_str(), fullFilename);
+    char *ret = realpath(filename.c_str(), fullFilename);
+    if (!ret) {
+        std::cout << "Warning: realpath( '" << ret << "'." << std::endl;
+    }
 #endif
     m_fullFileName = fullFilename;
     m_recentFile.prepend(m_fullFileName);
@@ -609,24 +612,24 @@ inline void Application::uncolorize()
 void Application::text_in_a_box( const char *istr, const int len)
 {
 #ifdef CHTYPE_LONG
-   attron( A_OVERLINE | A_UNDERLINE | A_LEFTLINE);
-   if( len == 1)
-      attron( A_RIGHTLINE);
+    attron( A_OVERLINE | A_UNDERLINE | A_LEFTLINE);
+    if( len == 1)
+        attron( A_RIGHTLINE);
 #endif
-   addnstr( istr, 1);
-   if( len > 1)
-      {
+    addnstr( istr, 1);
+    if( len > 1)
+    {
 #ifdef CHTYPE_LONG
-      attroff( A_LEFTLINE);
+        attroff( A_LEFTLINE);
 #endif
-      if( len > 2)
-         addnstr( istr + 1, len - 2);
+        if( len > 2)
+            addnstr( istr + 1, len - 2);
 #ifdef CHTYPE_LONG
-      attron( A_RIGHTLINE);
+        attron( A_RIGHTLINE);
 #endif
-      addnstr( istr + len - 1, 1);
-      }
+        addnstr( istr + len - 1, 1);
+    }
 #ifdef CHTYPE_LONG
-   attroff( A_OVERLINE | A_UNDERLINE | A_LEFTLINE | A_RIGHTLINE);
+    attroff( A_OVERLINE | A_UNDERLINE | A_LEFTLINE | A_RIGHTLINE);
 #endif
 }
