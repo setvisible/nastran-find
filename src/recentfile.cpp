@@ -26,6 +26,7 @@
 #  include <unistd.h>
 #  include <sys/types.h>
 #  include <pwd.h>
+#  include <sys/stat.h>   // stat(), mkdir()
 #endif
 
 using namespace std;
@@ -33,21 +34,20 @@ using namespace std;
 /*! \class RecentFile
  *  \brief The class RecentFile manages the recent files of the application.
  *
- * It stores data in a plain old text file '.nastranfind'.
+ * It stores data in a plain old text file, in the user's preferences directory.
  *
- * Each platform has its own API for finding the user's home folder,
- * or documents folder, or preferences folder. Permissions to access settings
- * belonging to the current user
+ * Each platform has its own API for finding the user's preferences folder,
+ * and permissions to access it.
+ *
+ * The preferences folder is platform dependant:
  *
  * \li On Windows, it's usually:
- *     C:\Documents and Settings\{User Name}\Application Data\NastranFind.ini
- * or  C:\Users\{User Name}\AppData\Local\NastranFind.ini
- * or  C:\Users\{User Name}\AppData\LocalLow\NastranFind.ini
- * or  C:\Users\{User Name}\AppData\Roaming\NastranFind.ini
+ *     C:\Documents and Settings\{User Name}\Application Data\NastranFind\Recent.ini
+ * or  C:\Users\{User Name}\AppData\Local\NastranFind\Recent.ini
+ * or  C:\Users\{User Name}\AppData\LocalLow\NastranFind\Recent.ini
+ * or  C:\Users\{User Name}\AppData\Roaming\NastranFind\Recent.ini
  *
- *    (%APPDATA%\NastranFind.ini)
- *
- *     Note: %APPDATA% is returned by SHGetKnownFolderPath().
+ *    (%APPDATA%\NastranFind\Recent.ini)
  *
  * \li On Mac OS X and iOS:
  *    ~/Library/Preferences/com.NastranFind.plist
@@ -55,9 +55,9 @@ using namespace std;
  *    ("$HOME/Library/Preferences/com.NastranFind.plist")
  *
  * \li On Unix:
- *    ~/.config/NastranFind.ini
+ *    ~/.config/nastranfind/recent.ini
  *
- *    ("$HOME/.config/NastranFind.ini")
+ *    ("$HOME/.config/nastranfind/recent.ini")
  *
  */
 
@@ -77,15 +77,25 @@ RecentFile::RecentFile()
     /// \todo HRESULT hr = SHGetFolderPathW(NULL, CSIDL_APPDATA,  NULL, 0, szPath);
 
     if( SUCCEEDED(hr) ){
+
         /* ANSI */
-        PathAppendA(szPath, "NastranFind.ini");
+        PathAppendA(szPath, "NastranFind");
         std::string path(szPath);
-        m_configFullFilename = path;
+        m_configFullFilename = path + std::string("\\Recent.ini");
+
+        if ( !(CreateDirectoryA(path.c_str(), NULL)
+               || GetLastError() == ERROR_ALREADY_EXISTS) ) {
+            std::cout << "Failed to create directory '" << path << "'." << std::endl;
+        }
 
         /// \todo /* UNICODE */
-        /// \todo PathAppendW(szPath, "NastranFind.ini");
+        /// \todo PathAppendW(szPath, "NastranFind");
         /// \todo std::wstring path(szPath);
-        /// \todo m_configFullFilename = path;
+        /// \todo m_configFullFilename = path + std::string("\\Recent.ini");
+        /// \todo if ( !(CreateDirectoryW(path.c_str(), NULL)
+        /// \todo        || GetLastError() == ERROR_ALREADY_EXISTS) ) {
+        /// \todo     std::cout << "Failed to create directory '" << path << "'." << std::endl;
+        /// \todo }
 
     } else {
         std::cout << "SHGetFolderPath() failed for standard location '%APPDATA%'." << std::endl;
@@ -99,7 +109,18 @@ RecentFile::RecentFile()
 
     passwd* pw = getpwuid(getuid());
     std::string homepath(pw->pw_dir);
-    m_configFullFilename = homepath + "/.config/NastranFind.ini";
+    std::string configpath = homepath + std::string("/.config/nastranfind");
+
+    /* Create a directory with read/write/search permissions */
+    /* for owner and group, and read/search permissions for others. */
+    struct stat st = {0};
+    if( stat(configpath.c_str(), &st) == -1 ){
+        int status = mkdir(configpath.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+        if ( status == -1 ) {
+            std::cout << "Failed to create directory '" << configpath << "'." << std::endl;
+        }
+    }
+    m_configFullFilename = configpath + std::string("/recent.ini");
 
 #endif
 
@@ -158,8 +179,8 @@ bool RecentFile::read()
         }
         infile.close();
     } else {
-        std::cout << "Config file '" << m_configFullFilename << "' not found." << std::endl;
-        return false;
+        std::cout << "Creating Config file '" << m_configFullFilename << "'." << std::endl;
+                return false;
     }
     return true;
 }

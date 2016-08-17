@@ -23,18 +23,24 @@
 /* Search Box Size */
 #define C_SEARCH_SIZE 32 // characters
 
-/* ******************************************************** */
-/* Assume the Nastran Bulk files have less than             */
-/* 100 million (1E+8) lines per file                        */
-/* If not, juste increase C_LINE_NUMBER_BUFFER_SIZE,        */
-/* C_LINE_NUMBER_FORMAT_INT and C_LINE_NUMBER_FORMAT_CHAR   */
-/* ******************************************************** */
+/*                                                                */
+/* Here we make an assumption:                                    */
+/*                                                                */
+/* A Nastran Bulk file contains less than 100 million of lines    */
+/* (10^8), per file.                                              */
+/*                                                                */
+/* If the file contains more than 99999999 lines,                 */
+/* NastranFind simply shows "line........:"                       */
+/* because there is not enough place to show the line count.      */
+/*                                                                */
+/* To increase that limit, change the 5 DEFINE below.             */
+/* To increase that limit, change the DEFINE values below.        */
+/*                                                                */
 #define C_LINE_NUMBER_BUFFER_SIZE 8
 #define C_LINE_NUMBER_FORMAT_INT  "%8i"
 #define C_LINE_NUMBER_FORMAT_CHAR "%8c"
-
-#define C_LINE_NUMBER_MAX_NUMBER powl(10, C_LINE_NUMBER_BUFFER_SIZE )-1
-#define C_LINE_NUMBER_WIDTH C_LINE_NUMBER_BUFFER_SIZE + 6
+#define C_LINE_NUMBER_MAX_NUMBER powl(10, C_LINE_NUMBER_BUFFER_SIZE )-1 /* == 10^8-1 */
+#define C_LINE_NUMBER_WIDTH C_LINE_NUMBER_BUFFER_SIZE + 6  /* 6 == len("line") + len(": ") */
 
 
 #endif  // GLOBAL_H

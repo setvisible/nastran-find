@@ -211,15 +211,15 @@ void Engine::searchText(const string &text,
              StringHelper::containsInsensitive(text, searchedText) ) {
 
             /* Convert an integer into a length-fixed string */
-            char buffer[ C_LINE_NUMBER_BUFFER_SIZE ];
+            char buffer[ C_LINE_NUMBER_BUFFER_SIZE + 1 ];       // 8 digits + 1 '\0'
             if( currentLineNumber < C_LINE_NUMBER_MAX_NUMBER ) {
                 sprintf( buffer, C_LINE_NUMBER_FORMAT_INT, currentLineNumber);
             } else {
                 sprintf( buffer, C_LINE_NUMBER_FORMAT_CHAR, '.');
             }
-            string result = "line"
+            string result = string("line")
                     + string(buffer)
-                    + ": "
+                    + string(": ")
                     + text;
             m_results[currentFileName].push_back( result );
         }
