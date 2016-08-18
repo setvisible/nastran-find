@@ -51,7 +51,7 @@ void tst_Engine::test_empty_filename()
     engine.find("", "");
 
     // Then
-    QCOMPARE( engine.errorCount(), 1);
+    QCOMPARE( (int)engine.errorCount(), 1);
     QCOMPARE( engine.errorAt(0).c_str(), STR_ERR_EMPTY_FILENAME);
 }
 
@@ -70,7 +70,7 @@ void tst_Engine::test_invalid_filename()
             + std::string(invalid)
             + STR_ERR_QUOTE_END;
 
-    QCOMPARE( engine.errorCount(), 1);
+    QCOMPARE( (int)engine.errorCount(), 1);
     QCOMPARE( engine.errorAt(0), error_msg );
 }
 
@@ -89,14 +89,14 @@ void tst_Engine::test_broken()
             + std::string("not_existing_file.dat")
             + STR_ERR_QUOTE_END;
 
-    QCOMPARE( engine.errorCount(), 1);
+    QCOMPARE( (int)engine.errorCount(), 1);
     QCOMPARE( engine.errorAt(0), error_msg_1);
 
     std::string link0( "test.dat" );
     std::string link1( "not_existing_file.dat" );
     std::string link2( ".\\broken.dat" );
 
-    QCOMPARE( engine.linkCount(), 3);
+    QCOMPARE( (int)engine.linkCount(), 3);
     QCOMPARE( engine.linkAt(0), link0);
     QCOMPARE( engine.linkAt(1), link1);
     QCOMPARE( engine.linkAt(2), link2);
@@ -121,12 +121,12 @@ void tst_Engine::test_comment()
     engine.find(filename, "");
 
     // Then
-    QCOMPARE( engine.errorCount(), 0);
+    QCOMPARE( (int)engine.errorCount(), 0);
 
     std::string link0( "test.dat" );
     std::string link1( "include.dat" );
 
-    QCOMPARE( engine.linkCount(), 2);
+    QCOMPARE( (int)engine.linkCount(), 2);
     QCOMPARE( engine.linkAt(0), link0);
     QCOMPARE( engine.linkAt(1), link1);
 }
@@ -149,7 +149,7 @@ void tst_Engine::test_cyclic_self_inclusion()
             + std::string("4")
             + STR_ERR_END;
 
-    QCOMPARE( engine.errorCount(), 1);
+    QCOMPARE( (int)engine.errorCount(), 1);
     QCOMPARE( engine.errorAt(0), error_msg);
 
 }
@@ -171,7 +171,7 @@ void tst_Engine::test_cyclic_simple()
             + std::string("2")
             + STR_ERR_END;
 
-    QCOMPARE( engine.errorCount(), 1);
+    QCOMPARE( (int)engine.errorCount(), 1);
     QCOMPARE( engine.errorAt(0), error_msg);
 }
 
@@ -201,10 +201,10 @@ void tst_Engine::test_cyclic_complex()
             + std::string("2")
             + STR_ERR_END;
 
-    QCOMPARE( engine.errorCount(), 1);
+    QCOMPARE( (int)engine.errorCount(), 1);
     QCOMPARE( engine.errorAt(0), error_msg);
 
-    QCOMPARE( engine.linkCount(), 4);
+    QCOMPARE( (int)engine.linkCount(), 4);
     QCOMPARE( engine.linkAt(0), link_0 );
     QCOMPARE( engine.linkAt(1), link_a );
     QCOMPARE( engine.linkAt(2), link_b );
@@ -230,7 +230,7 @@ void tst_Engine::test_duplicate_1()
             + std::string("8")
             + STR_ERR_END;
 
-    QCOMPARE( engine.errorCount(), 1);
+    QCOMPARE( (int)engine.errorCount(), 1);
     QCOMPARE( engine.errorAt(0), error_msg);
 }
 
@@ -251,7 +251,7 @@ void tst_Engine::test_duplicate_2()
             + std::string("3")
             + STR_ERR_END;
 
-    QCOMPARE( engine.errorCount(), 1);
+    QCOMPARE( (int)engine.errorCount(), 1);
     QCOMPARE( engine.errorAt(0), error_msg);
 }
 
@@ -265,7 +265,7 @@ void tst_Engine::test_first_last_line()
     engine.find(filename, "");
 
     // Then
-    QCOMPARE( engine.errorCount(), 0);
+    QCOMPARE( (int)engine.errorCount(), 0);
 }
 
 /******************************************************************************
@@ -278,7 +278,7 @@ void tst_Engine::test_multiline()
     engine.find(filename, "");
 
     // Then
-    QCOMPARE(engine.errorCount(), 0);
+    QCOMPARE( (int)engine.errorCount(), 0);
 
     std::string link0( "test.dat" );
     std::string link1( "./path/to/included_A.dat" );
@@ -287,7 +287,7 @@ void tst_Engine::test_multiline()
     std::string link4( "./path/to/included_D.dat" );
     std::string link5( "./path/to/included_E.dat" );
 
-    QCOMPARE( engine.linkCount(), 6);
+    QCOMPARE( (int)engine.linkCount(), 6);
     QCOMPARE( engine.linkAt(0), link0 );
     QCOMPARE( engine.linkAt(1), link1);
     QCOMPARE( engine.linkAt(2), link2);
@@ -314,12 +314,12 @@ void tst_Engine::test_quotes()
     engine.find(filename, "");
 
     // Then
-    QCOMPARE( engine.errorCount(), 0);
+    QCOMPARE( (int)engine.errorCount(), 0);
 
     std::string link0( "test.dat" );
     std::string link1( "it's_quoted.dat" );
 
-    QCOMPARE( engine.linkCount(), 2);
+    QCOMPARE( (int)engine.linkCount(), 2);
     QCOMPARE( engine.linkAt(0), link0);
     QCOMPARE( engine.linkAt(1), link1);
 }
@@ -346,7 +346,7 @@ void tst_Engine::test_single_line()
         engine.find(filename, "");
 
         // Then
-        QCOMPARE(engine.errorCount(), 0);
+        QCOMPARE( (int)engine.errorCount(), 0);
 
         std::string link1( "included_A.dat" );
         std::string link2( "included_B.dat" );
@@ -354,7 +354,7 @@ void tst_Engine::test_single_line()
         std::string link4( "./included_D.dat" );
         std::string link5( "./included_E.dat" );
 
-        QCOMPARE(engine.linkCount(), 6);
+        QCOMPARE( (int)engine.linkCount(), 6);
         QCOMPARE( engine.linkAt(1), link1);
         QCOMPARE( engine.linkAt(2), link2);
         QCOMPARE( engine.linkAt(3), link3);
@@ -374,7 +374,7 @@ void tst_Engine::test_subdirectories()
     engine.find(filename, "");
 
     // Then
-    QCOMPARE(engine.errorCount(), 0);
+    QCOMPARE( (int)engine.errorCount(), 0);
 
     std::string link0( "test.dat" );
     std::string link1( "bulk/included_1.dat" );
@@ -382,7 +382,7 @@ void tst_Engine::test_subdirectories()
     std::string link3( "../bulk/included_A.dat" );
     std::string link4( "./../bulk/included_B.dat" );
 
-    QCOMPARE( engine.linkCount(), 5);
+    QCOMPARE( (int)engine.linkCount(), 5);
     QCOMPARE( engine.linkAt(0), link0);
     QCOMPARE( engine.linkAt(1), link1);
     QCOMPARE( engine.linkAt(2), link2);

@@ -52,7 +52,7 @@ void tst_Search::test_find()
     engine.find( &buffer, "END", filename);
 
     // Then
-    QCOMPARE( engine.resultCount(filename), 1);
+    QCOMPARE( (int)engine.resultCount(filename), 1);
     QCOMPARE( engine.resultAt(filename, 0), std::string("line       2: CEND"));
 }
 
@@ -72,7 +72,7 @@ void tst_Search::test_find_empty()
     engine.find( &buffer, "", filename);
 
     // Then
-    QCOMPARE( engine.resultCount(filename), 0);
+    QCOMPARE( (int)engine.resultCount(filename), 0);
 }
 
 /******************************************************************************
@@ -115,7 +115,7 @@ void tst_Search::test_find_whitespace()
     engine.find( &buffer, "     ", filename);
 
     // Then
-    QCOMPARE( engine.resultCount(filename), 24);
+    QCOMPARE( (int)engine.resultCount(filename), 24);
     QCOMPARE( engine.resultAt(filename,  0), std::string( "line       1: SOL 101" ));
     QCOMPARE( engine.resultAt(filename,  1), std::string( "line       2: CEND" ));
     QCOMPARE( engine.resultAt(filename,  2), std::string( "line       3: SUBCASE 1" ));
@@ -156,7 +156,7 @@ void tst_Search::test_find_injection_regexp()
     engine.find( &buffer, ".*", filename); /* RegExp not allowed */
 
     // Then
-    QCOMPARE( engine.resultCount(filename), 0);
+    QCOMPARE( (int)engine.resultCount(filename), 0);
 }
 
 
@@ -210,7 +210,7 @@ void tst_Search::test_find_multiline_deck()
     engine.find( &buffer, "+       1.0", filename); // injection REGEXP !!!
 
     // Then
-    QCOMPARE( engine.resultCount(filename), 1);
+    QCOMPARE( (int)engine.resultCount(filename), 1);
     /// \todo   QCOMPARE( engine.resultAt(filename, 0), std::string(
     /// \todo               "line      28: DMI     MYDOF   1       1       -1.0    1.0     1.0     -1.0    1.0     +\n"
     /// \todo               "            : +       2.0     -1.0    1.0     3.0     -1.0    1.0     4.0     -1.0    +\n"
@@ -236,7 +236,7 @@ void tst_Search::test_find_two_occurences_on_same_line()
     engine.find( &buffer, "123", filename);
 
     // Then
-    QCOMPARE( engine.resultCount(filename), 1);
+    QCOMPARE( (int)engine.resultCount(filename), 1);
     QCOMPARE( engine.resultAt(filename, 0), std::string("line       1: CBAR         123     456 123.456   "));
 }
 

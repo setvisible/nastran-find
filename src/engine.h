@@ -17,9 +17,11 @@
 #define ENGINE_H
 
 #include <string>
-#include <list>
+#include <vector>
 #include <map>
 
+typedef std::vector<std::string> stringlist;
+typedef std::map<std::string, stringlist> stringmap;
 
 /* **************************************************************** */
 /* Messages stored in header file is required for testing           */
@@ -35,8 +37,6 @@ static const char STR_ERR_END[]        = ".";
 
 class Engine
 {
-    typedef std::list<std::string> stringlist;
-
 public:
     explicit Engine();
 
@@ -47,16 +47,18 @@ public:
               const std::string &searchedText,
               const std::string &currentFileName );
 
-    int linkCount() const;
-    std::string linkAt(const int index) const;
+    inline stringlist files() const { return m_files; }
+    inline std::string::size_type linkCount() const { return m_files.size(); }
+    std::string linkAt(const std::string::size_type index) const;
 
-    int errorCount() const;
-    std::string errorAt(const int index) const;
+    inline std::string::size_type errorCount() const { return m_errors.size(); }
+    std::string errorAt(const std::string::size_type index) const;
 
-    int resultCountAll() const;
-    int resultCountLines(const std::string &filename) const;
-    int resultCount(const std::string &filename) const;
-    std::string resultAt(const std::string &filename, const int index) const;
+    inline stringmap results() const { return m_results; }
+    stringlist::size_type resultCountAll() const;
+    stringlist::size_type resultCountLines(const std::string &filename) const;
+    stringlist::size_type resultCount(const std::string &filename) const;
+    std::string resultAt(const std::string &filename, const stringlist::size_type index) const;
 
 
 protected:
@@ -75,7 +77,7 @@ private:
     stringlist m_errors;
 
     /* map containing the occurences for each file */
-    std::map<std::string, stringlist> m_results;
+    stringmap m_results;
 
     void appendFileName(const std::string &filenameToBeInserted,
                         const std::string &currentFileName,

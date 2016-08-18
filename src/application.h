@@ -83,8 +83,8 @@ private:
 
     void printwSyntaxColoration(const std::string &text, const int row);
 
-    inline std::string horizontalSeparator(char c = '=');
-    inline int getMaximumScroll() const;
+    inline std::string horizontalSeparator(const char c = '=') const;
+    inline stringlist::size_type getMaximumScroll() const;
     inline void hideCursor();
 
 

@@ -23,8 +23,9 @@
 #include <algorithm> // transform(), powl()
 #include <fstream>
 #include <stdio.h>
+
 #if defined(Q_OS_UNIX)
-#include <limits.h>
+#  include <limits.h>
 #endif
 
 using namespace std;
@@ -65,19 +66,19 @@ void Engine::find(const string &fullFileName, const string &searchedText )
     /* **************************** */
     /* Get the working directory    */
     /* **************************** */
-    std::string pwd = FileInfo::canonicalFilePath(fullFileName);
-    std::string filename = FileInfo::fileName(fullFileName);
+    string pwd = FileInfo::canonicalFilePath(fullFileName);
+    string filename = FileInfo::fileName(fullFileName);
 
-    appendFileName(filename, std::string(), -1);
+    appendFileName(filename, string(), -1);
 
     /* **************************** */
     /* For each INCLUDE file        */
     /* **************************** */
-    for( stringlist::iterator it = m_files.begin(); it != m_files.end(); ++it )  {
+    for (stringlist::size_type i = 0; i < m_files.size() ; ++i) {
 
-        string currentFileName = *it ;
+        const string currentFileName = m_files.at(i);
 
-        std::string current_fullfilename;
+        string current_fullfilename;
         if (FileInfo::isRelativePath(currentFileName)) {
             current_fullfilename = FileInfo::concat(pwd, currentFileName);
         } else {
@@ -92,7 +93,7 @@ void Engine::find(const string &fullFileName, const string &searchedText )
             string error_msg;
             error_msg += STR_ERR_CANNOT_OPEN + currentFileName + STR_ERR_QUOTE_END;
             m_errors.push_back( error_msg );
-            m_results[currentFileName].push_back( STR_ERR_MISSING_FILE );
+            m_results[ currentFileName ].push_back( STR_ERR_MISSING_FILE );
 
         } else {
 
@@ -139,7 +140,7 @@ string Engine::searchInclude(istream * const iodevice)
     const streampos oldpos = iodevice->tellg();  // stores the position
 
     {
-        std::string keyword( 7, '\0');
+        string keyword( 7, '\0');
         iodevice->read(&keyword[0], 7 );
 
         std::transform( keyword.begin(), keyword.end(), keyword.begin(), ::toupper );
@@ -152,7 +153,7 @@ string Engine::searchInclude(istream * const iodevice)
 
     /* Magic Number 10:                                           */
     /*  -> increases buffer to store quotes and trimming space(s) */
-    std::string text(PATH_MAX + 10, '\0');
+    string text(PATH_MAX + 10, '\0');
     iodevice->read( &text[0], text.length() );
     iodevice->clear();
     iodevice->seekg(oldpos);
@@ -221,7 +222,7 @@ void Engine::searchText(const string &text,
                     + string(buffer)
                     + string(": ")
                     + text;
-            m_results[currentFileName].push_back( result );
+            m_results[ currentFileName ].push_back( result );
         }
     }
 }
@@ -233,10 +234,10 @@ void Engine::appendFileName(const string &filenameToBeInserted,
                             const int currentLineNumber)
 {
     /* Check if the filename is not already referenced */
-    for( stringlist::iterator it = m_files.begin(); it != m_files.end(); ++it )  {
+    for( stringlist::const_iterator it = m_files.begin(); it != m_files.end(); ++it )  {
         if ( filenameToBeInserted == (*it) ) {
 
-            std::string lineNumber = std::to_string(currentLineNumber) ;
+            string lineNumber = std::to_string(currentLineNumber) ;
             string error_msg
                     = STR_ERR_CYCLIC
                     + currentFileName
@@ -257,40 +258,22 @@ void Engine::appendFileName(const string &filenameToBeInserted,
 
 /******************************************************************************
  ******************************************************************************/
-int Engine::linkCount() const
+string Engine::linkAt(const string::size_type index) const
 {
-    return m_files.size();
-}
-
-std::string Engine::linkAt(const int index) const
-{
-    int row = 0;
-    for(stringlist::const_iterator it = m_files.begin(); it != m_files.end(); ++it ) {
-        if (row == index) {
-            return (*it);
-        }
-        row++;
+    if (index < m_files.size()) {
+        return m_files.at(index);
     }
-    return std::string();
+    return string();
 }
 
 /******************************************************************************
  ******************************************************************************/
-int Engine::errorCount() const
+string Engine::errorAt(const string::size_type index) const
 {
-    return m_errors.size();
-}
-
-std::string Engine::errorAt(const int index) const
-{
-    int row = 0;
-    for(stringlist::const_iterator it = m_errors.begin(); it != m_errors.end(); ++it ) {
-        if (row == index) {
-            return (*it);
-        }
-        row++;
+    if (index < m_errors.size()) {
+        return m_errors.at(index);
     }
-    return std::string();
+    return string();
 }
 
 
@@ -299,11 +282,11 @@ std::string Engine::errorAt(const int index) const
 /*! \brief Returns the number of occurences found, in the file and all its includes.
  * \sa resultCount(), resultCountLines()
  */
-int Engine::resultCountAll() const
+stringlist::size_type Engine::resultCountAll() const
 {
-    int value = 0;
-    for( int i = 0; i < linkCount(); ++i ) {
-        const string file = linkAt(i);
+    auto value = 0;
+    for( stringlist::const_iterator it = m_files.begin(); it != m_files.end(); ++it ) {
+        const string file = (*it);
         value += resultCount(file);
     }
     return value;
@@ -314,7 +297,7 @@ int Engine::resultCountAll() const
  * Indeed, an occurence can be display on several lines, i.e. continued Deck Entry.
  * \sa resultCount(), resultCountAll()
  */
-int Engine::resultCountLines(const std::string &filename) const
+stringlist::size_type Engine::resultCountLines(const string &filename) const
 {
     /// \todo resultCountLines( ) to be implemented
     return resultCount(filename);
@@ -324,33 +307,28 @@ int Engine::resultCountLines(const std::string &filename) const
 /*! \brief Returns the number of occurences for the given \a filename.
  * \sa resultCountAll(), resultCountLines()
  */
-int Engine::resultCount(const string &filename) const
+stringlist::size_type Engine::resultCount(const string &filename) const
 {    
     /// \bug libc -> map::at() has a weird bug 'std::out_of_range' when const scope
     /// \bug BUGFIX: use of [] instead of at()
-    typedef std::map<std::string, stringlist > myMap;
-    myMap rrr = (myMap)m_results;
-    stringlist res = rrr[filename];
-    return res.size();
+
+    //const stringlist result = m_results.at(filename);
+    const stringlist result = ((stringmap)m_results)[filename];
+    return result.size();
 }
 
 /*! \brief Returns the occurence at the given \a index, for the given \a filename.
  */
-std::string Engine::resultAt(const string &filename, const int index) const
+string Engine::resultAt(const string &filename, const stringlist::size_type index) const
 {
     /// \bug libc -> map::at() has a weird bug 'std::out_of_range' when const scope
     /// \bug BUGFIX: use of [] instead of at()
-    typedef std::map<std::string, stringlist > myMap;
-    myMap rrr = (myMap)m_results;
-    stringlist res = rrr[filename];
 
-    int row = 0;
-    for(stringlist::const_iterator it = res.begin(); it != res.end(); ++it ) {
-        if (row == index) {
-            return (*it);
-        }
-        row++;
+    //const stringlist result = m_results.at(filename);
+    const stringlist result = ((stringmap)m_results)[filename];
+    if (index < result.size()) {
+        return result.at(index);
     }
-    return std::string();
+    return string();
 }
 

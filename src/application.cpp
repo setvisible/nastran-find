@@ -25,9 +25,9 @@
 #include <stdlib.h>
 
 #if defined(Q_OS_WIN)
-#include <windows.h>
+#  include <windows.h>
 #elif defined(Q_OS_UNIX)
-#include <limits.h>
+#  include <limits.h>
 #endif
 
 using namespace std;
@@ -331,14 +331,16 @@ void Application::showResults()
 
     move(row+1,0);
 
-    string prev = horizontalSeparator();
-    printw( (char*)prev.c_str() );
+    const string prev = horizontalSeparator();
+    printw( prev.c_str() );
 
     row += 2; // start
 
-    for( int i = 0; i < m_engine.linkCount(); ++i ) {
+    const stringlist files = m_engine.files();
 
-        const string file = m_engine.linkAt(i);
+    for( stringlist::const_iterator it = files.begin(); it != files.end(); ++it ) {
+
+        const string file = (*it);
 
         ++first_page_shown;
         if(first_page_shown >= m_currentScroll && row < m_rowErrorBox) {
@@ -349,13 +351,16 @@ void Application::showResults()
             ++row;
         }
 
-        if( m_engine.resultCount(file) > 0 ) {
+        const stringmap results = m_engine.results();
+        const stringlist result = results.at(file);
 
-            for( int j = 0; j < m_engine.resultCount(file); ++j ){
+        if( result.size() > 0 ) {
+
+            for( stringlist::const_iterator it2 = result.begin(); it2 != result.end(); ++it2 ) {
 
                 ++first_page_shown;
                 if( first_page_shown >= m_currentScroll && row < m_rowErrorBox ){
-                    const string result = m_engine.resultAt(file, j);
+                    const string result = (*it2);
                     move(row,0);
                     this->printwSyntaxColoration( result, row );
                     ++row;
@@ -375,7 +380,6 @@ void Application::showResults()
                 ++row;
                 ++row;
             }
-
         }
     }
 }
@@ -509,8 +513,6 @@ void Application::printwSyntaxColoration(const string &text, const int row )
         printw( "%s", text.c_str() );
     }
 
-
-
 }
 
 /******************************************************************************
@@ -522,17 +524,18 @@ void Application::showErrors()
 {
     m_rowErrorBox = m_rowInfoBox - m_engine.errorCount() - 1;
 
-    if( m_engine.errorCount() == 0 )
+    if (m_engine.errorCount() == 0) {
         return;
+    }
 
     move(m_rowErrorBox,0);
 
-    string prev = horizontalSeparator();
+    const string prev = horizontalSeparator();
     printw( prev.c_str() );
 
     int row = 1;
 
-    for( int i = 0; i < m_engine.errorCount(); ++i ) {
+    for (string::size_type i = 0; i < m_engine.errorCount(); ++i) {
         const string error_msg = m_engine.errorAt(i);
 
         move(m_rowErrorBox + row, 0);
@@ -555,7 +558,7 @@ void Application::showInfo()
     //show infos
     move(m_rowInfoBox,0);
 
-    string prev = horizontalSeparator();
+    const string prev = horizontalSeparator();
     printw( prev.c_str() );
 
     move(m_rowInfoBox+1,0);
@@ -570,7 +573,7 @@ void Application::showInfo()
  *         with N the width of the screen.
  * This function can be used to draw a horizontal separator on the screen.
  */
-inline string Application::horizontalSeparator(char c)
+inline string Application::horizontalSeparator(const char c) const
 {
     string ret;
     int columnCount = getmaxx(stdscr); // Curses: get the max number of columns
@@ -578,13 +581,14 @@ inline string Application::horizontalSeparator(char c)
     return ret;
 }
 
-inline int Application::getMaximumScroll() const
+inline stringlist::size_type Application::getMaximumScroll() const
 {
-    int value = 0;
-    for (int i = 0; i < m_engine.linkCount(); ++i) {
-        string fn = m_engine.linkAt(i);
+    auto value = 0;
+    const stringlist files = m_engine.files();
+    for( stringlist::const_iterator it = files.begin(); it != files.end(); ++it ) {
+        const string file = (*it);
         value += 3;
-        value += m_engine.resultCountLines(fn);
+        value += m_engine.resultCountLines( file );
     }
     return value;
 }
