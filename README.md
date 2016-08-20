@@ -1,6 +1,6 @@
 # Nastranfind
 
-Nastranfind is a solution for browsing NASTRAN input deck files for Windows, Mac OS X and Linux. 
+Nastranfind is a solution for browsing NASTRAN input deck files for Windows, Mac OS X and Unux. 
 
 Its core is developed in C++, based on the **Curses** library. 
 
@@ -10,17 +10,32 @@ Main window, looking for `123456` in the toyota yaris model. It found 8447 occur
 
 ![](screenshots/find_yaris.png)
 
+## Features
+
+Nastranfind perfoms a **case-insensitive** text research over **the whole 'INCLUDE' hierarchy** of a given FE model (Finite Element model).
+
+It returns results for the _whole_ FEA (Finite Element Analysis), not limited to a given file and/or directory.
+
+### Capabilites
+
+ - Nastranfind can find the exact location of a given *Nastran deck entry*
+ - Nastranfind can check the connections between *deck entries*, as well as the missing or duplicate entries
+ - Nastranfind can verify if the **INCLUDEs** are correctly linked
+ - Nastranfind can compare two FE models (require to open two consoles)
+
+...and it does these nice things with **very large FE Models** that contain 1,000,000 elements and more.
+
 
 ## Dependencies
 
-### On Linux / Mac OS X
+### On Unix / Mac OS X
 
 Install NCurses:
 
-    sudo apt-get update
-	sudo apt-get install libncurses5-dev
-	whereis ncurses
-    > ncurses: /usr/include/ncurses.h
+    $ sudo apt-get update
+    $ sudo apt-get install libncurses5-dev
+    $ whereis ncurses
+    ncurses: /usr/include/ncurses.h
 
 [http://www.gnu.org/software/ncurses/ncurses.html](http://www.gnu.org/software/ncurses/ncurses.html "http://www.gnu.org/software/ncurses/ncurses.html")
 
@@ -47,35 +62,36 @@ Compile and run `nastranfind.pro`.
 
 ### Build with CMake
 
-On Linux / Mac OS X 
+On Unix / Mac OS X 
 
-    tar zxvf nastranfind-src.tar.gz
-    cd nastranfind-src
-    mkdir -p build
-    cd build
-    cmake ..
-    make
+    $ tar zxvf nastranfind-src.tar.gz
+    $ cd nastranfind-src
+    $ mkdir -p build
+    $ cd build
+    $ cmake ..
+    $ make
 
 On Windows
 
-    tar zxvf nastranfind-src.tar.gz
-    cd nastranfind-src
-    mkdir -p build
-    cd build
-    "C:\Program Files\CMake\bin\cmake.exe" ..
-    start .
-    REM Double click the Visual Studio project
+    > "C:\Program Files\7-Zip\7z.exe" x nastranfind-src.tar.gz
+    > "C:\Program Files\7-Zip\7z.exe" x nastranfind-src.tar
+    > cd nastranfind-src
+    > mkdir -p build
+    > cd build
+    > "C:\Program Files\CMake\bin\cmake.exe" ..
+    > start .
+    > REM Double click the Visual Studio project
 
 
 ## Usage
 
-On Linux / Mac OS X 
+On Unix / Mac OS X 
 
-        ./nastranfind MyFile.bdf
+    $ ./nastranfind MyFile.bdf
 
 On Windows
 
-        nastranfind.exe MyFile.bdf
+    > nastranfind.exe MyFile.bdf
 
 __Commands:__
 
