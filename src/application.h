@@ -25,7 +25,7 @@
 
 class Application
 {
-    enum Color {
+    enum class Color {
         NORMAL           = 1,
         TITLE               ,
         SEARCHBOX           ,
@@ -40,15 +40,15 @@ class Application
         NASTRAN_SYMBOL
     };
 
-    enum SymbolType {
-        SYMBOL_UNKNOWN      ,
-        SYMBOL_ALPHA        ,
-        SYMBOL_DIGIT        ,
-        SYMBOL_QUOTE
+    enum class Symbol {
+        UNKNOWN  ,
+        ALPHA    ,
+        DIGIT    ,
+        QUOTE
     };
-    enum Mode {
-        MODE_BROWSE,     ///< Mode when using the keys to scroll the results
-        MODE_SEARCH      ///< Mode when using the keys to write a new search string
+    enum class Mode {
+        BROWSE,     ///< Mode when using the keys to scroll the results
+        SEARCH      ///< Mode when using the keys to write a new search string
     };
 
 public:

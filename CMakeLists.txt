@@ -1,12 +1,23 @@
-cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 project(nastranfind)
 
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE ON)
+set(NF_VERSION "1.0.0")
+set(PACKAGE_VERSION_MAJOR "1")
+set(PACKAGE_VERSION_MINOR "0")
+set(PACKAGE_VERSION_PATCH "0")
+set(PACKAGE_VERSION "${PACKAGE_VERSION_MAJOR}.${PACKAGE_VERSION_MINOR}.${PACKAGE_VERSION_PATCH}")
 
+cmake_minimum_required(VERSION 2.6.0 FATAL_ERROR)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE "Release" CACHE STRING
+            "Choose the type of build, options are: Debug Release RelWithDebInfo MinSizeRel."
+            FORCE)
+endif(NOT CMAKE_BUILD_TYPE)
 
 set(MY_SOURCES
+    ./icons/icon.rc
     ./src/global.h
     ./src/application.h
     ./src/application.cpp
@@ -25,6 +36,21 @@ set(MY_SOURCES
 
 add_executable(nastranfind WIN32 ${MY_SOURCES})
 
+
+### Windows shell lightweight utility functions
+if(WIN32)
+    ## Remark: MinGw32 uses its own 'shlwapi.h'. Do not link to the C:\Windows\System one.
+    ## So, don't use the following lines:
+    #find_library(SHLWAPI_LIBRARY Shlwapi)
+    #set(YOUR_LIBRARIES ${YOUR_LIBRARIES} ${SHLWAPI_LIBRARY})
+    ## ...but instead use this one:
+    set(YOUR_LIBRARIES ${YOUR_LIBRARIES} "-lShlwapi")
+else()
+    set(SHLWAPI)
+endif()
+
+
+### Curses
 if(WIN32)
     # =========================================================
     # PDCurses - Public Domain Curses
@@ -39,8 +65,8 @@ if(WIN32)
 
     # searching for dll file
     find_file(PDCURSES_DLL pdcurses.dll PATHS ./pdcurses/bin/)
-    message(${PDCURSES_DLL})
-    if (PDCURSES_INCLUDE_DIR AND PDCURSES_LIBRARY AND PDCURSES_DLL)
+    message(STATUS "PDCurses DLL found in: " ${PDCURSES_DLL})
+    if(PDCURSES_INCLUDE_DIR AND PDCURSES_LIBRARY AND PDCURSES_DLL)
         # you may need that if further action in your CMakeLists.txt depends
         # on detecting your library
         set(PDCURSES_FOUND TRUE)
@@ -64,7 +90,7 @@ if(WIN32)
 
     else()
         message(FATAL_ERROR "Package Curses required, but not found!")
-    endif ()
+    endif()
 
 elseif(UNIX)
     # =========================================================

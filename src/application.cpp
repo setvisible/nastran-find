@@ -42,7 +42,7 @@ static const char STR_NO_RESULT[]      = "(no results)";
 /*! \brief Constructor.
  */
 Application::Application( int argc, char *argv[] )
-    : m_mode(MODE_BROWSE)
+    : m_mode(Mode::BROWSE)
     , m_fullFileName("~~~unknown file~~~")
     , m_searchedText(string())
     , m_currentScroll(0)
@@ -93,21 +93,21 @@ void Application::initialize()
     PDC_set_title( C_APPLICATION_NAME );
 #endif
 
-    /*         id color                     foreground     background   */
-    init_pair( NORMAL,               COLOR_WHITE,   COLOR_BLACK);
-    init_pair( TITLE,                COLOR_BLACK,   COLOR_GREEN);
-    init_pair( SEARCHBOX,            COLOR_GREEN,   COLOR_BLACK);
-    init_pair( FILENAME,             COLOR_YELLOW,  COLOR_BLACK);
-    init_pair( LINE_NUMBER,          COLOR_CYAN,    COLOR_BLACK);
-    init_pair( OCCURENCE,            COLOR_BLACK,   COLOR_YELLOW);
-    init_pair( ERROR_MESSAGE,        COLOR_BLACK,   COLOR_RED);
-    init_pair( NASTRAN_CARD,         COLOR_YELLOW,  COLOR_BLACK);
-    init_pair( NASTRAN_COMMENT,      COLOR_GREEN,   COLOR_BLACK);
-    init_pair( NASTRAN_DIGIT,        COLOR_RED,     COLOR_BLACK);
-    init_pair( NASTRAN_QUOTE,        COLOR_CYAN,    COLOR_BLACK);
-    init_pair( NASTRAN_SYMBOL,       COLOR_RED,     COLOR_BLACK);
+    /*              id color                foreground     background   */
+    init_pair( (int)Color::NORMAL,          COLOR_WHITE,   COLOR_BLACK);
+    init_pair( (int)Color::TITLE,           COLOR_BLACK,   COLOR_GREEN);
+    init_pair( (int)Color::SEARCHBOX,       COLOR_GREEN,   COLOR_BLACK);
+    init_pair( (int)Color::FILENAME,        COLOR_YELLOW,  COLOR_BLACK);
+    init_pair( (int)Color::LINE_NUMBER,     COLOR_CYAN,    COLOR_BLACK);
+    init_pair( (int)Color::OCCURENCE,       COLOR_BLACK,   COLOR_YELLOW);
+    init_pair( (int)Color::ERROR_MESSAGE,   COLOR_BLACK,   COLOR_RED);
+    init_pair( (int)Color::NASTRAN_CARD,    COLOR_YELLOW,  COLOR_BLACK);
+    init_pair( (int)Color::NASTRAN_COMMENT, COLOR_GREEN,   COLOR_BLACK);
+    init_pair( (int)Color::NASTRAN_DIGIT,   COLOR_RED,     COLOR_BLACK);
+    init_pair( (int)Color::NASTRAN_QUOTE,   COLOR_CYAN,    COLOR_BLACK);
+    init_pair( (int)Color::NASTRAN_SYMBOL,  COLOR_RED,     COLOR_BLACK);
 
-    attrset(COLOR_PAIR(NORMAL));
+    attrset(COLOR_PAIR(Color::NORMAL));
     keypad(stdscr, TRUE); // Curses: enables special keys F1, F2 etc..
 
     mousemask( ALL_MOUSE_EVENTS, NULL);
@@ -165,14 +165,14 @@ int Application::exec()
         refresh(); // Curses: print all on real screen
 
         switch(m_mode){
-        case MODE_BROWSE: {
+        case Mode::BROWSE: {
             noecho(); // Curses: Don't echo() while we do getch
             pressedKey = getch(); // Curses: Wait for user's next action
             this->onKeyPressed(pressedKey);
             break;
         }
 
-        case MODE_SEARCH: {
+        case Mode::SEARCH: {
             /* erase previous search with whitespaces */
             move(3,9);
             string buf;
@@ -182,7 +182,7 @@ int Application::exec()
             move(3,9);
             echo();
 
-            colorize(SEARCHBOX);
+            colorize(Color::SEARCHBOX);
             char buffer[C_SEARCH_SIZE];
             getnstr( buffer, sizeof(buffer) - 1 ); // Curses: get a length-fixed input
             uncolorize();
@@ -194,7 +194,7 @@ int Application::exec()
             m_currentScroll = 0;
             m_maximumScroll = getMaximumScroll();
 
-            m_mode = MODE_BROWSE;
+            m_mode = Mode::BROWSE;
             break;
         }
 
@@ -220,7 +220,7 @@ void Application::onKeyPressed(const int key)
 
     case 'f':
     case 'F':
-        m_mode = MODE_SEARCH;
+        m_mode = Mode::SEARCH;
         break;
 
         /// \todo case 'p':
@@ -233,7 +233,7 @@ void Application::onKeyPressed(const int key)
     case 'X':
     case KEY_NPAGE:
         /* Scroll page down fast */
-        m_mode = MODE_BROWSE;
+        m_mode = Mode::BROWSE;
         if( m_currentScroll < m_maximumScroll ){
             m_currentScroll += 8;
         }
@@ -243,7 +243,7 @@ void Application::onKeyPressed(const int key)
     case 'S':
     case KEY_PPAGE:
         /* Scroll page up fast */
-        m_mode = MODE_BROWSE;
+        m_mode = Mode::BROWSE;
         if( m_currentScroll > 0 ){
             m_currentScroll -= 8;
         }
@@ -253,7 +253,7 @@ void Application::onKeyPressed(const int key)
     case 'Z':
     case KEY_DOWN:
         /* Scroll page down slowly */
-        m_mode = MODE_BROWSE;
+        m_mode = Mode::BROWSE;
         if( m_currentScroll < m_maximumScroll ){
             m_currentScroll++;
         }
@@ -264,7 +264,7 @@ void Application::onKeyPressed(const int key)
     case 'A':
     case KEY_UP:
         /* Scroll page up slowly  */
-        m_mode = MODE_BROWSE;
+        m_mode = Mode::BROWSE;
         if( m_currentScroll > 0 ){
             m_currentScroll--;
         }
@@ -284,7 +284,7 @@ void Application::showTitle()
     /* Title */
     move(m_rowTitleBox,0);
 
-    colorize(TITLE);
+    colorize(Color::TITLE);
     printw( C_APPLICATION_NAME );
     uncolorize();
 
@@ -298,7 +298,7 @@ void Application::showTitle()
     move(m_rowTitleBox+3,0);
     printw( "Search: <" );
 
-    colorize(SEARCHBOX);
+    colorize(Color::SEARCHBOX);
     if( m_searchedText.empty() ){
         printw( "---search field empty---" );
     }else{
@@ -345,7 +345,7 @@ void Application::showResults()
         ++first_page_shown;
         if(first_page_shown >= m_currentScroll && row < m_rowErrorBox) {
             move(row,0);
-            colorize(FILENAME);
+            colorize(Color::FILENAME);
             printw( "--- %s ---", file.c_str() );
             uncolorize();
             ++row;
@@ -408,7 +408,7 @@ void Application::printwSyntaxColoration(const string &text, const int row )
         /* ***************************** */
         /* Filename                      */
         /* ***************************** */
-        colorize(FILENAME);
+        colorize(Color::FILENAME);
         printw( "%s", text.c_str() );
         uncolorize();
 
@@ -416,7 +416,7 @@ void Application::printwSyntaxColoration(const string &text, const int row )
         /* ***************************** */
         /* Error Message                 */
         /* ***************************** */
-        colorize(ERROR_MESSAGE);
+        colorize(Color::ERROR_MESSAGE);
         printw( "%s", text.c_str() );
         uncolorize();
 
@@ -424,11 +424,11 @@ void Application::printwSyntaxColoration(const string &text, const int row )
         /* ***************************** */
         /* Results                       */
         /* ***************************** */
-        colorize(LINE_NUMBER);
+        colorize(Color::LINE_NUMBER);
         printw( "%s", text.substr(0, C_LINE_NUMBER_WIDTH).c_str() );
         uncolorize();
 
-        SymbolType type = SYMBOL_UNKNOWN;
+        Symbol symbol = Symbol::UNKNOWN;
 
         //int type = -1;
 
@@ -438,7 +438,7 @@ void Application::printwSyntaxColoration(const string &text, const int row )
             char ch = (*p);
             switch(ch) {
             case '$':
-                colorize(NASTRAN_COMMENT);
+                colorize(Color::NASTRAN_COMMENT);
                 printw( "%s", p);
                 uncolorize();
                 p = text.end();
@@ -447,43 +447,43 @@ void Application::printwSyntaxColoration(const string &text, const int row )
             case ' ':
             case '=':
             case ',':
-                if (type != SYMBOL_QUOTE) {
-                    type = SYMBOL_UNKNOWN;
+                if (symbol != Symbol::QUOTE) {
+                    symbol = Symbol::UNKNOWN;
                     printw( "%c", ch );
                 }
                 break;
 
             default:
-                if( (type == SYMBOL_UNKNOWN && isalpha( ch ))
-                        || type==SYMBOL_ALPHA ) {
+                if( (symbol == Symbol::UNKNOWN && isalpha( ch ))
+                        || symbol == Symbol::ALPHA ) {
 
                     /* Deck Card */
-                    type = SYMBOL_ALPHA;
-                    colorize(NASTRAN_CARD);
+                    symbol = Symbol::ALPHA;
+                    colorize(Color::NASTRAN_CARD);
                     printw( "%c", ch );
                     uncolorize();
 
-                } else if( (type == SYMBOL_UNKNOWN && isdigit( ch ))
-                           || type==SYMBOL_DIGIT ) {
+                } else if( (symbol == Symbol::UNKNOWN && isdigit( ch ))
+                           || symbol == Symbol::DIGIT ) {
 
                     /* Digit 0..9 */
-                    type = SYMBOL_DIGIT;
-                    colorize(NASTRAN_DIGIT);
+                    symbol = Symbol::DIGIT;
+                    colorize(Color::NASTRAN_DIGIT);
                     printw( "%c", ch );
                     uncolorize();
 
-                } else if( (type == SYMBOL_UNKNOWN && ( ch =='\"' ||  ch =='\'') )
-                           || type==SYMBOL_QUOTE )  {
+                } else if( (symbol == Symbol::UNKNOWN && ( ch =='\"' ||  ch =='\'') )
+                           || symbol == Symbol::QUOTE )  {
 
                     /* Quotes text */
-                    type = SYMBOL_QUOTE;
-                    colorize(NASTRAN_QUOTE);
+                    symbol = Symbol::QUOTE;
+                    colorize(Color::NASTRAN_QUOTE);
                     printw( "%c", ch );
                     uncolorize();
 
                 } else {
                     /* Other char like +, ., etc. */
-                    colorize(NASTRAN_SYMBOL);
+                    colorize(Color::NASTRAN_SYMBOL);
                     printw( "%c", ch );
                     uncolorize();
                 }
@@ -539,7 +539,7 @@ void Application::showErrors()
         const string error_msg = m_engine.errorAt(i);
 
         move(m_rowErrorBox + row, 0);
-        colorize(ERROR_MESSAGE);
+        colorize(Color::ERROR_MESSAGE);
         printw( "/!\\:%s", error_msg.c_str() );
         uncolorize();
         ++row;

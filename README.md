@@ -30,12 +30,16 @@ It returns results for the _whole_ FEA (Finite Element Analysis), not limited to
 
 ### On Unix / Mac OS X
 
-Install NCurses:
+ - First sign into the administrative (root) account by running su or sudo:
 
-    $ sudo apt-get update
-    $ sudo apt-get install libncurses5-dev
-    $ whereis ncurses
-    ncurses: /usr/include/ncurses.h
+         $ su
+
+ - Install NCurses:
+
+         $ apt-get update
+         $ apt-get install libncurses5-dev
+         $ whereis ncurses
+         ncurses: /usr/include/ncurses.h
 
 [http://www.gnu.org/software/ncurses/ncurses.html](http://www.gnu.org/software/ncurses/ncurses.html "http://www.gnu.org/software/ncurses/ncurses.html")
 

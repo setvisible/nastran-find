@@ -40,20 +40,25 @@ class Engine
 public:
     explicit Engine();
 
+    /* Clear the previous search */
     void clear();
 
+    /* Do a search */
     void find(const std::string &fullFileName, const std::string &searchedText );
     void find(std::istream * const iodevice,
               const std::string &searchedText,
               const std::string &currentFileName );
 
+    /* Getters -> return the file hierarchy */
     inline stringlist files() const { return m_files; }
     inline std::string::size_type linkCount() const { return m_files.size(); }
     std::string linkAt(const std::string::size_type index) const;
 
+    /* Getters -> return the errors, if so */
     inline std::string::size_type errorCount() const { return m_errors.size(); }
     std::string errorAt(const std::string::size_type index) const;
 
+    /* Getters -> return the search results */
     inline stringmap results() const { return m_results; }
     stringlist::size_type resultCountAll() const;
     stringlist::size_type resultCountLines(const std::string &filename) const;
