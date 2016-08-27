@@ -13,19 +13,12 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this program; If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef VERSION_H
-#define VERSION_H
+#ifndef CONFIG_H
+#define CONFIG_H
 
-/* Cmake */
-#ifndef NF_VERSION
-#  include "src/config.h"
-#endif
+/*
+ * These values are automatically set according to their cmake variables.
+ */
+#cmakedefine NF_VERSION @NF_VERSION@
 
-/* Qt Project */
-#define STRINGIFY_INTERNAL(x) #x
-#define STRINGIFY(x) STRINGIFY_INTERNAL(x)
-#define NF_VERSION_STR STRINGIFY(NF_VERSION)
-
-const char * const NF_VERSION_LONG  = NF_VERSION_STR;
-
-#endif // VERSION_H
+#endif /* CONFIG_H */

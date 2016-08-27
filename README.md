@@ -56,36 +56,43 @@ Install PDCurses:
 
 ## Compilation
 
-First download `nastranfind-src.tar.gz`
 
+1. Download `nastranfind-src.tar.gz`.
 
-### Build with Qt
+2. Unzip:
 
-Compile and run `nastranfind.pro`.
+        $ tar zxvf nastranfind-src.tar.gz
+        $ cd nastranfind-src/
 
+3. Build with Qt
 
-### Build with CMake
+     Compile and run `nastranfind.pro`.
 
-On Unix / Mac OS X 
+4. Build with CMake
 
-    $ tar zxvf nastranfind-src.tar.gz
-    $ cd nastranfind-src
-    $ mkdir -p build
-    $ cd build
-    $ cmake ..
-    $ make
+     - On Unix / Mac OS X
 
-On Windows
+            $ mkdir -p build
+            $ cd build/
+            $ cmake ..
+            $ make -j4
+            $ make install
 
-    > "C:\Program Files\7-Zip\7z.exe" x nastranfind-src.tar.gz
-    > "C:\Program Files\7-Zip\7z.exe" x nastranfind-src.tar
-    > cd nastranfind-src
-    > mkdir -p build
-    > cd build
-    > "C:\Program Files\CMake\bin\cmake.exe" ..
-    > start .
-    > REM Double click the Visual Studio project
+     - On Windows (MinGW)
 
+            > mkdir -p build
+            > cd build/
+            > cmake .. -G "MinGW Makefiles"
+            > make -j4
+
+     - On Windows (MSVC)
+
+            > mkdir -p build
+            > cd build/
+            > cmake .. -G "Visual Studio 14 2015"
+            > start .
+
+         Then, double click the Visual Studio project (vcxproj).
 
 ## Usage
 

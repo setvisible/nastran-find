@@ -1,11 +1,15 @@
 project(nastranfind)
 
-set(NF_VERSION "1.0.0")
-set(PACKAGE_VERSION_MAJOR "1")
-set(PACKAGE_VERSION_MINOR "0")
-set(PACKAGE_VERSION_PATCH "0")
-set(PACKAGE_VERSION "${PACKAGE_VERSION_MAJOR}.${PACKAGE_VERSION_MINOR}.${PACKAGE_VERSION_PATCH}")
+### Versioning
+set(NF_VERSION_MAJOR "1")
+set(NF_VERSION_MINOR "0")
+set(NF_VERSION_PATCH "0")
+set(NF_VERSION "${NF_VERSION_MAJOR}.${NF_VERSION_MINOR}.${NF_VERSION_PATCH}")
 
+configure_file( ./src/config.h.cmake ./src/config.h )
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
+
+### CMake Compiler Options
 cmake_minimum_required(VERSION 2.6.0 FATAL_ERROR)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
@@ -16,6 +20,7 @@ if(NOT CMAKE_BUILD_TYPE)
             FORCE)
 endif(NOT CMAKE_BUILD_TYPE)
 
+### Sources
 set(MY_SOURCES
     ./icons/icon.rc
     ./src/global.h
