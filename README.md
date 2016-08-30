@@ -1,8 +1,12 @@
 # Nastranfind
 
-Nastranfind is a solution for browsing NASTRAN input deck files for Windows, Mac OS X and Unux. 
+Nastranfind is a solution for browsing NASTRAN input deck files for Windows, Mac OS X and Unix. 
 
 Its core is developed in C++, based on the **Curses** library. 
+
+## Download
+
+Go to the [download](https://github.com/setvisible/nastran-find/releases "Download") page
 
 ## Screenshots
 

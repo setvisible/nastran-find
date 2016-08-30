@@ -33,14 +33,13 @@
 /* NastranFind simply shows "line........:"                       */
 /* because there is not enough place to show the line count.      */
 /*                                                                */
-/* To increase that limit, change the 5 DEFINE below.             */
 /* To increase that limit, change the DEFINE values below.        */
 /*                                                                */
 #define C_LINE_NUMBER_BUFFER_SIZE 8
 #define C_LINE_NUMBER_FORMAT_INT  "%8i"
 #define C_LINE_NUMBER_FORMAT_CHAR "%8c"
 #define C_LINE_NUMBER_MAX_NUMBER powl(10, C_LINE_NUMBER_BUFFER_SIZE )-1 /* == 10^8-1 */
-#define C_LINE_NUMBER_WIDTH C_LINE_NUMBER_BUFFER_SIZE + 6  /* 6 == len("line") + len(": ") */
+#define C_LINE_NUMBER_WIDTH C_LINE_NUMBER_BUFFER_SIZE + 6  /* Keep as is: 6 == len("line") + len(": ") */
 
 
 #endif  // GLOBAL_H

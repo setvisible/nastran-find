@@ -1,5 +1,37 @@
-# C++ objects and libs
+# ==============================================================================
+# Below we forbid everything and only allow what we know, that's much easier
+# than blocking about 500 different test files and bug report outputs.
+# ==============================================================================
+/.*
+/*
+!/examples
+!/icons
+!/pdcurses
+!/screenshots
+!/src
+!/test
+!/.gitignore
+!/CHANGELOG.md
+!/CHECKLIST-RELEASE.md
+!/CMakeLists.txt
+!/doxyfile
+!/LICENSE
+!/nastranfind.pri
+!/nastranfind.pro
+!/README.md
+!/TROUBLESHOOTING.md
+!/version.pri
 
+
+# =======================================
+# Reject some generic files
+# =======================================
+*~
+*.rej
+*.orig
+*.bak
+
+# C++ objects and libs
 *.slo
 *.lo
 *.o
@@ -35,4 +67,9 @@ Makefile*
 
 # QtCtreator CMake
 CMakeLists.txt.user*
+
+# =======================================
+# And reject some specific files
+# =======================================
+/scripts
 
