@@ -1,8 +1,8 @@
 # Nastranfind
 
-Nastranfind is a solution for browsing NASTRAN input deck files for Windows, Mac OS X and Unix. 
+Nastranfind is a solution for browsing [Nastran](https://en.wikipedia.org/wiki/Nastran "NASA Nastran") input deck files for Windows, Mac OS X and Unix. 
 
-Its core is developed in C++, based on the **Curses** library. 
+Its core is developed in C++, based on the [Curses](https://en.wikipedia.org/wiki/Curses_(programming_library) "Curses (programming library)") library. 
 
 ## Download
 
@@ -16,9 +16,9 @@ Main window, looking for `123456` in the toyota yaris model. It found 8447 occur
 
 ## Features
 
-Nastranfind perfoms a **case-insensitive** text research over **the whole 'INCLUDE' hierarchy** of a given FE model (Finite Element model).
+Nastranfind perfoms a **case-insensitive** text research over **the whole 'INCLUDE' hierarchy** of a given [FEA](https://en.wikipedia.org/wiki/Finite_element_analysis "Finite Element Analysis (FEA)") model.
 
-It returns results for the _whole_ FEA (Finite Element Analysis), not limited to a given file and/or directory.
+It returns results for the _whole_ FEA, not limited to a given file and/or directory.
 
 ### Capabilites
 
@@ -38,24 +38,20 @@ It returns results for the _whole_ FEA (Finite Element Analysis), not limited to
 
          $ su
 
- - Install NCurses:
+ - Install [NCurses](http://www.gnu.org/software/ncurses/ncurses.html "Go to NCurses Website"):
 
          $ apt-get update
          $ apt-get install libncurses5-dev
          $ whereis ncurses
          ncurses: /usr/include/ncurses.h
 
-[http://www.gnu.org/software/ncurses/ncurses.html](http://www.gnu.org/software/ncurses/ncurses.html "http://www.gnu.org/software/ncurses/ncurses.html")
-
 
 ### On Windows
 
-Install PDCurses:
+Install [PDCurses](http://pdcurses.sourceforge.net/ "Go to PDCurses Website"):
 
  - Win9x/Me/NT/2k/XP/Vista --> build the directory `win32`
  - Win7/Win8/Win10 --> build the directory `win32a`
-
-[http://pdcurses.sourceforge.net/](http://pdcurses.sourceforge.net/)
 
 
 ## Compilation
