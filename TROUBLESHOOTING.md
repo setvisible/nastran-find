@@ -57,7 +57,7 @@ The work-around is to delete this key *manually*.
 
 ### Problem
 
-Wrong position of occurence textboxes when the line contains tab char.
+Wrong position of occurrence textboxes when the line contains tab char.
 
 ### Solution
 
@@ -84,7 +84,7 @@ When running the code with C++ and NCurses in QtCreator:
     #include <ncurses.h>
     int main()
     {
-      initscr();// inicializa pantalla
+      initscr();
       printw("Hello world!");
       refresh();
       getch();

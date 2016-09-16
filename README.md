@@ -10,17 +10,17 @@ Go to the [download](https://github.com/setvisible/nastran-find/releases "Downlo
 
 ## Screenshots
 
-Main window, looking for `123456` in the toyota yaris model. It found 8447 occurences :
+Main window, looking for `123456` in the Toyota Yaris model. It found 8447 occurrences:
 
 ![](screenshots/find_yaris.png)
 
 ## Features
 
-Nastranfind perfoms a **case-insensitive** text research over **the whole 'INCLUDE' hierarchy** of a given [FEA](https://en.wikipedia.org/wiki/Finite_element_analysis "Finite Element Analysis (FEA)") model.
+Nastranfind performs a **case-insensitive** text research over **the whole 'INCLUDE' hierarchy** of a given [FEA](https://en.wikipedia.org/wiki/Finite_element_analysis "Finite Element Analysis (FEA)") model.
 
 It returns results for the _whole_ FEA, not limited to a given file and/or directory.
 
-### Capabilites
+### Capabilities
 
  - Nastranfind can find the exact location of a given *Nastran deck entry*
  - Nastranfind can check the connections between *deck entries*, as well as the missing or duplicate entries

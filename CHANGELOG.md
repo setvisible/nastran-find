@@ -8,7 +8,7 @@
  - Fixed build issues with debian 8.0
  - updated readme.md
  - added example
- - improved perfs for large bulk files
+ - improved performances for large bulk files
  - changed recent files
  - minor
  - corrected realpath() warning

@@ -2,9 +2,9 @@
 
 ### Testing
 
- - Make sure nastranfind works
- - Run the auto tests
- - Run the manual & performance tests
+ - Make sure NastranFind works
+ - Run auto tests
+ - Run manual & performance tests
  - Ensure they all passed
 
 
@@ -41,8 +41,11 @@
 - Check the version in both targets  with `> nastranfind.exe --version`
 - Zip the target with:
  * the GLIDER examples
- * the PDCurses dll
- * the Std C lib dll
+ * the PDCurses DLL
+ * the STD library DLLs:
+   - libgcc_s_dw2-1.dll
+   - libstdc++-6.dll
+   - libwinpthread-1.dll
 
 --> Target name : `nastranfind-vXXXX-win32.zip` where XXX is the version
 
@@ -53,8 +56,8 @@
 - Edit the tag XXX
 - Upload the targets
 - Publish as Pre-Release and write the announce:
- - Title: "NastranFind version XXX"
- - Description: the list of changes
+ * Title: "NastranFind version XXX"
+ * Description: the list of changes
 
 
 That's all folks
