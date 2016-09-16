@@ -23,23 +23,15 @@ endif(NOT CMAKE_BUILD_TYPE)
 ### Sources
 set(MY_SOURCES
     ./icons/icon.rc
-    ./src/global.h
-    ./src/application.h
     ./src/application.cpp
-    ./src/engine.h
     ./src/engine.cpp
-    ./src/fileinfo.h
     ./src/fileinfo.cpp
-    ./src/recentfile.h
     ./src/recentfile.cpp
-    ./src/stringhelper.h
     ./src/stringhelper.cpp
-    ./src/systemdetection.h
-    ./src/version.h
     ./src/main.cpp
     )
 
-add_executable(nastranfind WIN32 ${MY_SOURCES})
+add_executable(nastranfind ${MY_SOURCES})
 
 
 ### Windows shell lightweight utility functions
@@ -90,8 +82,7 @@ if(WIN32)
         set(YOUR_LIBRARIES ${YOUR_LIBRARIES} ${PDCURSES_LIBRARY})
 
         # Copy *.DLL
-        install(FILES ${PDCURSES_DLL}
-                DESTINATION ${CMAKE_BINARY_DIR})
+        file(COPY ${PDCURSES_DLL} DESTINATION ${CMAKE_BINARY_DIR})
 
     else()
         message(FATAL_ERROR "Package Curses required, but not found!")
