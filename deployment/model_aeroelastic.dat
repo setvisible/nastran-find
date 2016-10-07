@@ -1,0 +1,286 @@
+$
+$ Aeroelastic Model
+$
+$ Glider: Aeroelastic Model
+$ -------------------------
+$
+$ Aeroelastic Model Parameters
+PARAM   AUNITS  1.
+$
+$ Flat Aero Surface: fin
+PAERO1  111001
+AEFACT  1       0.      .0855092.1932441.3289816.5      .6710185.8067559
+        .91449081.
+CAERO1  111001  111001  0               5       1               1
+        5.875   0.      1.5     .5      5.875   0.      0.      .5
+$
+$ Flat Aero Surface: right_elevator
+PAERO1  110001
+AEFACT  2       0.      .3002372.5390071.7288938.87990521.
+CAERO1  110001  110001  0               5       2               1
+        5.875   0.      1.5     .5      5.875   1.      1.5     .5
+$
+$ Flat Aero Surface: left_elevator
+PAERO1  109001
+AEFACT  3       0.      .1200949.2711062.4609929.69976281.
+CAERO1  109001  109001  0               5       3               1
+        5.875   -1.     1.5     .5      5.875   0.      1.5     .5
+$
+$ Flat Aero Surface: right_wing
+PAERO1  108001
+AEFACT  4       0.      .1013103.1962021.2850823.3683316.4463068.519342
+        .5877501.6518244.7118393.768052 .8207035.8700194.9162108.9594759
+        1.
+CAERO1  108001  108001  0               5       4               1
+        .75     0.      0.      1.      .75     7.5     0.      1.
+$
+$ Flat Aero Surface: left_wing
+PAERO1  107001
+AEFACT  5       0.      .0405241.0837892.1299807.1792965.231948 .2881607
+        .3481756.41225  .4806581.5536932.6316684.7149177.8037978.8986897
+        .9999999
+CAERO1  107001  107001  0               5       5               1
+        .75     -7.5    0.      1.      .75     0.      0.      1.
+$
+$ Beam Spline: right_wing
+AELIST  1       108001  108002  108003  108004  108005  108006  108007
+        108008  108009  108010  108011  108012  108013  108014  108015
+        108016  108017  108018  108019  108020  108021  108022  108023
+        108024  108025  108026  108027  108028  108029  108030  108031
+        108032  108033  108034  108035  108036  108037  108038  108039
+        108040  108041  108042  108043  108044  108045  108046  108047
+        108048  108049  108050  108051  108052  108053  108054  108055
+        108056  108057  108058  108059  108060  108061  108062  108063
+        108064  108065  108066  108067  108068  108069  108070  108071
+        108072  108073  108074  108075
+SET1    29      101     102     103     104     105     106     107
+        108     117     118     119     120     121     122     123
+        124
+SPLINE5 29      108001  1               29      0.      1.      101
+        -1.     -1.     0.      BOTH            1.
+$
+$ Beam Spline: right_elevator
+AELIST  2       110001  110002  110003  110004  110005  110006  110007
+        110008  110009  110010  110011  110012  110013  110014  110015
+        110016  110017  110018  110019  110020  110021  110022  110023
+        110024  110025
+SET1    31      52      57      58
+SPLINE5 31      110001  2               31      0.      1.      1
+        -1.     0.      0.      BOTH            1.
+$
+$ Beam Spline: left_wing
+AELIST  3       107001  107002  107003  107004  107005  107006  107007
+        107008  107009  107010  107011  107012  107013  107014  107015
+        107016  107017  107018  107019  107020  107021  107022  107023
+        107024  107025  107026  107027  107028  107029  107030  107031
+        107032  107033  107034  107035  107036  107037  107038  107039
+        107040  107041  107042  107043  107044  107045  107046  107047
+        107048  107049  107050  107051  107052  107053  107054  107055
+        107056  107057  107058  107059  107060  107061  107062  107063
+        107064  107065  107066  107067  107068  107069  107070  107071
+        107072  107073  107074  107075
+SET1    30      109     110     111     112     113     114     115
+        116     125     126     127     128     129     130     131
+        132
+SPLINE5 30      107001  3               30      0.      1.      101
+        -1.     -1.     0.      BOTH            1.
+$
+$ Beam Spline: left_elevator
+AELIST  4       109001  109002  109003  109004  109005  109006  109007
+        109008  109009  109010  109011  109012  109013  109014  109015
+        109016  109017  109018  109019  109020  109021  109022  109023
+        109024  109025
+SET1    33      52      54      55
+SPLINE5 33      109001  4               33      0.      1.      1
+        -1.     0.      0.      BOTH            1.
+$
+$ Beam Spline: fin
+AELIST  5       111001  111002  111003  111004  111005  111006  111007
+        111008  111009  111010  111011  111012  111013  111014  111015
+        111016  111017  111018  111019  111020  111021  111022  111023
+        111024  111025  111026  111027  111028  111029  111030  111031
+        111032  111033  111034  111035  111036  111037  111038  111039
+        111040
+SET1    34      11      50      51      52
+SPLINE5 34      111001  5               34      0.      1.      20
+        -1.     0.      0.      BOTH            1.
+$
+$ Control Device: rudder (positive means right pedal pushed)
+AELIST  6       111004  111005  111009  111010  111014  111015  111019
+        111020  111024  111025  111029  111030  111034  111035  111039
+        111040
+AESURF  1       rudder  20      6       0               1.
+        .2      .3      -1.5708 1.5708
+$
+$ Control Device: elevator (positive means stick pushed)
+AELIST  7       109001  109002  109003  109004  109005  109006  109007
+        109008  109009  109010  109011  109012  109013  109014  109015
+        109016  109017  109018  109019  109020  109021  109022  109023
+        109024  109025  110001  110002  110003  110004  110005  110006
+        110007  110008  110009  110010  110011  110012  110013  110014
+        110015  110016  110017  110018  110019  110020  110021  110022
+        110023  110024  110025
+AESURF  2       elevator1       7       0               1.
+        .5      1.      -1.5708 1.5708
+$
+$ Control Device: r_flap (positive means flap down)
+AELIST  8       108050  108055  108060  108065  108070  108075
+AESURF  3       r_flap  11      8       0               1.
+        .2      .432241 -1.5708 1.5708
+$
+$ Control Device: l_flap (positive means flap up)
+AELIST  9       107005  107010  107015  107020  107025  107030
+AESURF  4       l_flap  12      9       0               1.
+        .2      .432241 0.      0.
+$
+$ Rigid Body Motion Trim Variables: AESTAT
+AESTAT  5       ANGLEA
+AESTAT  6       SIDES
+AESTAT  7       ROLL
+AESTAT  8       PITCH
+AESTAT  9       YAW
+AESTAT  10      URDD1
+AESTAT  11      URDD2
+AESTAT  12      URDD3
+AESTAT  13      URDD4
+AESTAT  14      URDD5
+AESTAT  15      URDD6
+AESTAT  16      AILERON
+$
+$ Referenced Coordinate Frames
+CORD2R   1               6.      0.      1.5     6.      0.      7.68466
+         12.1847 0.      1.5
+CORD2R   11              1.55    5.25    0.      1.55    5.25    5.47403
+         7.02403 5.25    0.
+CORD2R   12              1.55   -5.25    0.      1.55   -5.25    5.47403
+        -3.92403-5.25    0.
+CORD2R   20              6.175   0.      0.      6.175  -6.175   0.
+         12.35   0.      0.
+CORD2R   100             .8704   0.      0.      .8704   0.     -1.
+        -.1296   0.      0.
+CORD2R   101             .75     0.      0.      .75     0.      1.
+         1.75    0.      0.
+$ Modal Damping
+TABDMP1, 30, CRIT
+       , 0., 0.02, 2000., 0.02, ENDT
+$
+$ Basic Aerodynamic Parameters (Velocity: 108km/h = 30m/s)
+$     ACSID,  V , REFC,  RHO
+AERO,     0, 30.,   1., 1.21
+$
+$ Dynamic Pressure: Q = 0.5 * 1.21 * 30**2
+PARAM, Q, 544.5
+$
+$
+$ Definition of the Gust
+$ ----------------------
+$
+$ Activate Gust Response
+PARAM, GUSTAERO, -1
+$
+$ The gust is a (1-cos) gust. It has a length of 6m so that the time
+$ to pass the gust with a velocity of 30m/s equals 0.2s. This defines
+$ the frequency of the gust to be 5Hz. The gust amplitude is 2m/s.
+$ Thus the gust scale factor WG is 2/30 = 0.0667.
+$
+$       SID , DLOAD, WG,    X0,  V
+GUST,   1000, 1100,  0.0667, 0., 30.
+GUST,   2000, 1100,  0.0667, 0., 30.
+$
+$ Because the frequency response of a free structure cannot be computed
+$ at 0Hz, but the value of the Fourier transform at 0Hz equals the area
+$ under the time history of the gust, this area should be made zero by
+$ letting follow a second gust with opposite sign.
+$
+$ The DLOAD entry combines the terms of the first and the second gust.
+DLOAD,  1100, 1., 1., 1101, -1., 1102, -1., 1111,
+     ,  1., 1112
+DLOAD,  1200, 1., 1., 1101, -1., 1102, -1., 1111,
+     ,  1., 1112
+$
+$ First gust: Constant value of 1 from 0s to 0.2s
+TLOAD2, 1101, 1110,,, 0., 0.2, 0.
+$
+$ First gust: Cosine with a frequency of 5Hz from 0s to 0.2s
+TLOAD2, 1102, 1110,,, 0., 0.2, 5.
+$
+$ Second gust. Constant value of 1 from 5s to 5.2s
+TLOAD2, 1111, 1110,,, 5., 5.2, 0.
+$
+$ Second gust: Cosine with a frequency of 5Hz from 5s to 5.2s
+TLOAD2, 1112, 1110,,, 5., 5.2, 5.
+$
+$ The TLOAD2s reference EPOINT 1000. The DMIG entries place a 1 onto
+$ the diagonal of the stiffness at the position of the EPOINT. Thus,
+$ the response of the EPOINT is the time history of the dynamic load.
+$
+EPOINT, 1000
+DAREA,  1110, 1000,, 1.
+$
+DMIG, STIFF, 0, 6, 1, 0
+DMIG, STIFF, 1000, 0,, 1000, 0, 1.
+$
+$
+$ Aerodynamic Matrix Calculations
+$ -------------------------------
+$
+$   Mach-Number = 0. (incompressible aerodynamics)
+$   Reduced Frequencies: k = omega*c/(2V) = pi * f / 30
+$   Frequencies used: 0.1, 2., 4., 6., ... , 20.
+$
+MKAERO1, 0.
+       , 0.0419, 0.0838, 0.1257
+MKAERO1, 0.
+       , 0.0105, 0.2094, 0.4189, 0.6283, 0.8378, 1.0472, 1.2566, 1.4661
+MKAERO1, 0.
+       , 1.6755, 1.8850, 2.0944
+$
+$
+$ Frequencies and Time Steps
+$ --------------------------
+$
+$ The time history of the gust lasts from 0s to 10s. The frequency step
+$ must be less than 1/(10s) = 0.1Hz so that the period of the discrete
+$ Fourier transform is larger than 10s.
+$
+$ Frequencies for Fourier Transform:  0.1Hz to 20Hz
+FREQ1, 40, 0.1, 0.1, 199
+$
+$ Time Steps for Inverse Fourier Transform: 1.5s, Step=0.01
+TSTEP, 50, 150, 0.01
+$
+$
+$ Monitor Points
+$ --------------
+$
+MONPNT1 R_ROOTS RIGHT WING STRUCTURE: ROOT
+          345   R_WINGS         1.      0.      0.
+AECOMP  R_WINGS SET1    1000
+SET1, 1000, 116
+$
+MONDSP1 G38D    RIGHT WING: DISPLACEMENTS at Grid 38
+        123456  G38             1.5     7.5     0.		123456
+MONPNT1 G38     RIGHT WING: Loads at Grid 38
+          345   G38             1.      2.5     0.
+AECOMP  G38     SET1    1001
+SET1, 1001, 101
+$
+MONPNT1 G42     RIGHT WING: Loads at Grid 42
+          345   G42             1.      4.5     0.
+AECOMP  G42     SET1    1002
+SET1, 1002, 42, THRU, 48, 101, THRU, 104, 117,
+    , 118, THRU, 120
+$
+MONPNT1 G46     RIGHT WING: Loads at Grid 46
+          345   G46             1.      6.5     0.
+AECOMP  G46     SET1    1003
+SET1, 1003, 46, THRU, 48, 101, 102, 117, 118
+$
+MONDSP1 R_ROOTD2RIGHT WING AERODYNAMIC: ROOT DISP
+          345   R_WINGA         1.      0.      0.
+MONPNT1 R_ROOTA RIGHT WING AERODYNAMIC: ROOT
+          345   R_WINGAl        1.      0.      0.
+AECOMP  R_WINGA caero   108001
+AECOMP  R_WINGAl aelist 1001
+aelist	1001	107001
+$

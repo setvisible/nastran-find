@@ -1,0 +1,118 @@
+$ Demonstration Problem for Monitor Points
+$
+$   This Nastran input deck is used to compute the gust response of a
+$   glider. The wing root moment about the x-axis is computed by
+$   using monitor points. The result can be compared with the bending
+$   moment in element 15.
+$
+$ ======================================================================
+$
+$ Load Resultants are written to file 'loads.op2'
+$
+ASSIGN OUTPUT2='loads.op2',
+       UNIT=50
+$ASSIGN OUTPUT2='loads.op2'  UNIT=50 form=formatted
+$ASSIGN OUTPUT2='OUTDIR:loads.op2'  UNIT=50 form=formatted
+$
+id msc, fmondsp.dat $ v2005 ehj 9-Feb-2005
+SOL 146
+CEND
+$
+$ Case Control contains standard SOL 146 commands.
+$
+TITLE    = Demonstration Problem for Monitor Points
+SUBTITLE = Gust Response of a Glider
+ECHO = SORT
+$
+METHOD = 20        $ Modal Reduction
+K2PP   = STIFF     $ STIFF enters a 1 into the column
+                   $ and row of the EPOINT the dynamic
+                   $ load is applied to
+$
+set 100 = 101,116 ,117,108,109,132
+MONITOR(IMAG)=ALL
+DISP=100
+$
+SUBCASE 10
+   LABEL=Normal Modes
+   ANALYSIS=MODES
+$
+$ Second Subcase to Compute Gust Response
+$
+SUBCASE 20
+   LABEL=Gust Response
+   SDAMP  = 30        $ Modal Damping
+   FREQ   = 40        $ Excitation Frequencies
+   TSTEP  = 50        $ Time Steps
+   GUST   = 1000      $ Gust
+   DLOAD  = 1100      $ Dynamic load describing the time
+                      $ dependence of the gust
+   SET 99 = 111001    $ AEROF command needed to get flexible increments.
+   AEROF  = 99        $ Use of a set limits the output to the .f06.
+$SUBCASE 30
+$   LABEL=Gust Response 2
+$   SDAMP  = 30        $ Modal Damping
+$   FREQ   = 40        $ Excitation Frequencies
+$   TSTEP  = 50        $ Time Steps
+$   GUST   = 2000      $ Gust
+$   DLOAD  = 1200      $ Dynamic load describing the time
+$                      $ dependence of the gust
+$   SET 99 = 1         $ AEROF command needed to get flexible increments.
+$   AEROF  = 99        $ Use of a set limits the output to the .f06.
+$
+$ XY-Plot Requests
+$
+OUTPUT(XYPLOT)
+  XPAPER=29.
+  YPAPER=21.
+  XGRID=YES
+  YGRID=YES
+  XTITLE=TIME
+$
+$ Gust Profile
+  YTITLE=Gust
+  XYPLOT SDISP RESPONSE 20 / 1000(T1)
+$
+$ Displacements
+  YTITLE=Azimuth
+  XYPLOT DISP RESPONSE  20 / 1(R2)
+$
+$ Accelerations
+  YTITLE=Vertical Acceleration of Wing Root
+  XYPLOT ACCE RESPONSE 20 / 1(T3)
+  YTITLE=Pitch Acceleration of Wing Root
+  XYPLOT ACCE RESPONSE 20 / 1(R2)
+$
+$ Wing Root Bending Moment
+  YTITLE=Wing Root Bending Moment
+  XYPLOT  ELFORCE RESPONSE 20 / 15(4)
+  XYPUNCH ELFORCE RESPONSE 20 / 15(4)
+$
+BEGIN BULK
+$
+PARAM, POST, -1
+PARAM, GRDPNT, 0
+$
+$
+$ Enhanced Modal Reduction
+$ ------------------------
+$
+$ Normal Modes up to 60Hz
+EIGRL, 20,, 60.
+$
+$ Static Mode Shapes for Unit Loads at Response Dofs
+$ (Reciprocal Static Mode Shapes)
+PARAM, RESVEC, YES
+USET, U6, 1, 35
+$
+$ Support needed to compute Static Modes Shapes
+SUPORT, 1, 123456
+$
+$
+$ Model Definition
+INCLUDE 'model.dat'
+$
+$ Aeroelastic Model
+INCLUDE 'model_aeroelastic.dat'
+$
+ENDDATA
