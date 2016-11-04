@@ -75,7 +75,7 @@ Install [PDCurses](http://pdcurses.sourceforge.net/ "Go to PDCurses Website"):
             $ mkdir -p build
             $ cd build/
             $ cmake ..
-            $ make -j4
+            $ make -j
             $ make install
 
      - On Windows (MinGW)
@@ -83,7 +83,7 @@ Install [PDCurses](http://pdcurses.sourceforge.net/ "Go to PDCurses Website"):
             > mkdir -p build
             > cd build/
             > cmake .. -G "MinGW Makefiles"
-            > make -j4
+            > make -j
 
      - On Windows (MSVC)
 
