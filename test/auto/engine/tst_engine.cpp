@@ -303,11 +303,10 @@ void tst_Engine::test_quotes()
 {
     /*
      * $
-     * $ Starts with double-quote and ends with simple quote
+     * $ Filename that contains a simple quote:
      * $
-     * INCLUDE "include.dat'
+     * INCLUDE "it's_quoted.dat"
      */
-
     // Given, When
     Engine engine;
     std::string filename = QFINDTESTDATA("share/quotes/test.dat").toLatin1().data();

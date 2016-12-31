@@ -1,5 +1,12 @@
 $
-$ Starts with double-quote and ends with simple quote
+$ Starts with double-quote and ends with simple quote...
+$ /!\ Nastran should not open that file because it contains differents types of quote.
+$ It's not safe, especially if the filename contains a quote, as seen in the INCLUDE below.
 $
-INCLUDE "include.dat'
+$ Ex:
+$ INCLUDE "include.dat' --> should not be valid !
+$
+$ Filename that contains a simple quote:
+$
+INCLUDE "it's_quoted.dat"
 
