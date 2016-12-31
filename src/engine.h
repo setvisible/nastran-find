@@ -50,24 +50,24 @@ public:
               const std::string &currentFileName );
 
     /* Getters -> return the file hierarchy */
-    inline stringlist files() const { return m_files; }
-    inline std::string::size_type linkCount() const { return m_files.size(); }
-    std::string linkAt(const std::string::size_type index) const;
+    const stringlist& files() const { return m_files; }
+    std::string::size_type linkCount() const { return m_files.size(); }
+    const std::string linkAt(const std::string::size_type index) const;
 
     /* Getters -> return the errors, if so */
-    inline std::string::size_type errorCount() const { return m_errors.size(); }
-    std::string errorAt(const std::string::size_type index) const;
+    std::string::size_type errorCount() const { return m_errors.size(); }
+    const std::string errorAt(const std::string::size_type index) const;
 
     /* Getters -> return the search results */
-    inline stringmap results() const { return m_results; }
+    const stringmap& results() const { return m_results; }
     stringlist::size_type resultCountAll() const;
     stringlist::size_type resultCountLines(const std::string &filename) const;
     stringlist::size_type resultCount(const std::string &filename) const;
-    std::string resultAt(const std::string &filename, const stringlist::size_type index) const;
+    const std::string resultAt(const std::string &filename, const stringlist::size_type index) const;
 
 
 protected:
-    std::string searchInclude(std::istream * const iodevice);
+    const std::string searchInclude(std::istream * const iodevice) const;
 
     void searchText(const std::string &text,
                     const std::string &searchedText,

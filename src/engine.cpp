@@ -21,7 +21,7 @@
 #include "systemdetection.h"
 
 #include <algorithm> // transform(), powl()
-#include <fstream>
+#include <sstream>
 #include <stdio.h>
 
 #if defined(Q_OS_UNIX)
@@ -60,14 +60,14 @@ void Engine::find(const string &fullFileName, const string &searchedText )
 
     if( fullFileName.empty() ){
         m_errors.push_back( STR_ERR_EMPTY_FILENAME );
-        return ;
+        return;
     }
 
     /* **************************** */
     /* Get the working directory    */
     /* **************************** */
-    string pwd = FileInfo::canonicalFilePath(fullFileName);
-    string filename = FileInfo::fileName(fullFileName);
+    const string pwd = FileInfo::canonicalFilePath(fullFileName);
+    const string filename = FileInfo::fileName(fullFileName);
 
     appendFileName(filename, string(), -1);
 
@@ -85,11 +85,8 @@ void Engine::find(const string &fullFileName, const string &searchedText )
             current_fullfilename = currentFileName;
         }
 
-        /* std::ios::binary is needed for using tellg() and seekg() correctly.  */
-        /* Sadly, \r\n is considered now as two characters.                     */
-        ifstream infile( current_fullfilename.c_str(), std::ios::in | std::ios::binary );
-        if( !infile.is_open() ){
-
+        FILE *fp = fopen( currentFileName.c_str(), "rb" ); // read as binary
+        if (fp==NULL) {
             string error_msg;
             error_msg += STR_ERR_CANNOT_OPEN + currentFileName + STR_ERR_QUOTE_END;
             m_errors.push_back( error_msg );
@@ -97,9 +94,26 @@ void Engine::find(const string &fullFileName, const string &searchedText )
 
         } else {
 
-            find( &infile, searchedText, currentFileName );
+            const size_t blockSize = 1024;
+            char data[blockSize];
+            size_t lenFile = 0;
+            std::string wholeFileContent = "";
+            do {
+                lenFile = fread(data, 1, blockSize - 1, fp);
+                if (lenFile <= 0) break;
 
-            infile.close();
+                if (lenFile >= blockSize - 1)
+                    data[blockSize - 1] = '\0';
+                else
+                    data[lenFile - 1] = '\0';
+
+                wholeFileContent += data;
+
+            } while (lenFile > 0);
+
+            fclose(fp);
+            istringstream infile(wholeFileContent);
+            find( &infile, searchedText, currentFileName );
         }
     }
 }
@@ -125,7 +139,6 @@ void Engine::find(istream * const iodevice,
     } while( std::getline((*iodevice), line) );
 }
 
-
 /******************************************************************************
  ******************************************************************************/
 /*! \brief Return the filepath of the 'INCLUDE' statement, if the
@@ -135,7 +148,7 @@ void Engine::find(istream * const iodevice,
  * If the 'INCLUDE' statement is declared over several lines, the function
  * returns the entire filepath without the line breaks.
  */
-string Engine::searchInclude(istream * const iodevice)
+const string Engine::searchInclude(istream * const iodevice) const
 {
     const streampos oldpos = iodevice->tellg();  // stores the position
 
@@ -222,7 +235,7 @@ void Engine::searchText(const string &text,
                     + string(buffer)
                     + string(": ")
                     + text;
-            m_results[ currentFileName ].push_back( result );
+            m_results[ currentFileName ].push_back( std::move(result) );
         }
     }
 }
@@ -258,7 +271,7 @@ void Engine::appendFileName(const string &filenameToBeInserted,
 
 /******************************************************************************
  ******************************************************************************/
-string Engine::linkAt(const string::size_type index) const
+const string Engine::linkAt(const string::size_type index) const
 {
     if (index < m_files.size()) {
         return m_files.at(index);
@@ -268,7 +281,7 @@ string Engine::linkAt(const string::size_type index) const
 
 /******************************************************************************
  ******************************************************************************/
-string Engine::errorAt(const string::size_type index) const
+const string Engine::errorAt(const string::size_type index) const
 {
     if (index < m_errors.size()) {
         return m_errors.at(index);
@@ -286,7 +299,7 @@ stringlist::size_type Engine::resultCountAll() const
 {
     auto value = 0;
     for( stringlist::const_iterator it = m_files.begin(); it != m_files.end(); ++it ) {
-        const string file = (*it);
+        const string& file = (*it);
         value += resultCount(file);
     }
     return value;
@@ -308,26 +321,23 @@ stringlist::size_type Engine::resultCountLines(const string &filename) const
  * \sa resultCountAll(), resultCountLines()
  */
 stringlist::size_type Engine::resultCount(const string &filename) const
-{    
-    /// \bug libc -> map::at() has a weird bug 'std::out_of_range' when const scope
-    /// \bug BUGFIX: use of [] instead of at()
-
-    //const stringlist result = m_results.at(filename);
-    const stringlist result = ((stringmap)m_results)[filename];
-    return result.size();
+{
+    if( m_results.count(filename) > 0 ) {
+        const stringlist& result = m_results.at(filename);
+        return result.size();
+    }
+    return 0;
 }
 
 /*! \brief Returns the occurence at the given \a index, for the given \a filename.
  */
-string Engine::resultAt(const string &filename, const stringlist::size_type index) const
+const string Engine::resultAt(const string &filename, const stringlist::size_type index) const
 {
-    /// \bug libc -> map::at() has a weird bug 'std::out_of_range' when const scope
-    /// \bug BUGFIX: use of [] instead of at()
-
-    //const stringlist result = m_results.at(filename);
-    const stringlist result = ((stringmap)m_results)[filename];
-    if (index < result.size()) {
-        return result.at(index);
+    if( m_results.count(filename) > 0 ) {
+        const stringlist& result = m_results.at(filename);
+        if (index < result.size()) {
+            return result.at(index);
+        }
     }
     return string();
 }

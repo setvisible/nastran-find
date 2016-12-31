@@ -152,7 +152,7 @@ int Application::exec()
     int pressedKey = 0;
     while( pressedKey != 'q' &&
            pressedKey != 'Q' &&
-           pressedKey != '\033' ){  // \033 = Escape
+           pressedKey != '\033' ){  // \033 = Escape key
 
         clear(); // Curses: clear the screen
 
@@ -316,7 +316,7 @@ void Application::showTitle()
 
 /******************************************************************************
  ******************************************************************************/
-/*! Displays the results found contained in map \a lr on the screen.
+/*! Displays the results on screen.
  */
 void Application::showResults()
 {
@@ -336,14 +336,14 @@ void Application::showResults()
 
     row += 2; // start
 
-    const stringlist files = m_engine.files();
+    const stringlist& files = m_engine.files();
 
     for( stringlist::const_iterator it = files.begin(); it != files.end(); ++it ) {
 
-        const string file = (*it);
+        const string& file = (*it);
 
         ++first_page_shown;
-        if(first_page_shown >= m_currentScroll && row < m_rowErrorBox) {
+        if( first_page_shown >= m_currentScroll && row < m_rowErrorBox ) {
             move(row,0);
             colorize(Color::FILENAME);
             printw( "--- %s ---", file.c_str() );
@@ -351,8 +351,8 @@ void Application::showResults()
             ++row;
         }
 
-        const stringmap results = m_engine.results();
-        const stringlist result = results.at(file);
+        const stringmap& results = m_engine.results();
+        const stringlist& result = results.at(file);
 
         if( result.size() > 0 ) {
 
@@ -360,7 +360,7 @@ void Application::showResults()
 
                 ++first_page_shown;
                 if( first_page_shown >= m_currentScroll && row < m_rowErrorBox ){
-                    const string result = (*it2);
+                    const string& result = (*it2);
                     move(row,0);
                     this->printwSyntaxColoration( result, row );
                     ++row;
@@ -584,9 +584,9 @@ inline string Application::horizontalSeparator(const char c) const
 inline stringlist::size_type Application::getMaximumScroll() const
 {
     auto value = 0;
-    const stringlist files = m_engine.files();
+    const stringlist& files = m_engine.files();
     for( stringlist::const_iterator it = files.begin(); it != files.end(); ++it ) {
-        const string file = (*it);
+        const string& file = (*it);
         value += 3;
         value += m_engine.resultCountLines( file );
     }
