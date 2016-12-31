@@ -32,8 +32,8 @@ public:
     static char* trim( char* s, const char* delimiters = " \f\n\r\t\v");
 
     static bool containsInvisibleChar(const std::string &text);
-    static bool containsInsensitive(const std::string &text, const std::string &str);
-    static int findNextInsensitive(const std::string &text, const std::string &str, const int from);
+    static bool containsInsensitive(const std::string &text, const std::string &searchedText);
+    static int findNextInsensitive(const std::string &text, const std::string &searchedText, const int from);
 
     static int charCount ( const char * string, const char * characters );
 

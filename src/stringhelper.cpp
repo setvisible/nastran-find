@@ -27,8 +27,8 @@ using namespace std;
 /*! \brief Remove all the given \a charsToRemove from the given \a text.
  *
  * \code
- * std::string str("(555) 555-5555");
- * removeCharsFromString( str, "()-" );   // str == "555 5555555"
+ * std::string str("(555) 666-7777");
+ * removeCharsFromString( str, "()-" );   // str == "555 6667777"
  * \endcode
  */
 void StringHelper::removeCharsFromString( string &text, const string &charsToRemove )
@@ -108,14 +108,19 @@ bool StringHelper::containsInvisibleChar(const string &text)
 
 /******************************************************************************
  ******************************************************************************/
-/*! \brief Returns the location in the given \a text where
- *         the given \a searchedText starts.
+/*! \brief Returns the position of the first character of \a searchedText
+ *         in the \a text.
  *
- * The function is case insensitive.
+ * In particular:
+ *   \li Return 0, if the \a text starts with the \a searchedText.
+ *   \li Return n, where n is the position of the first character of \a searchedText in \a text.
+ *   \li Return string::npos, if \a searchedText is not found in \a text.
+ *
+ * \remark This function performs a case-insensitive string comparison.
  */
-int StringHelper::findNextInsensitive(const string &text, const string &str, const int from)
+int StringHelper::findNextInsensitive(const string &text, const string &searchedText, const int from)
 {
-    if( text.empty() || str.empty() )
+    if( text.empty() || searchedText.empty() )
         return string::npos;
 
     if( from < 0 || from >= (int)text.length() )
@@ -123,23 +128,23 @@ int StringHelper::findNextInsensitive(const string &text, const string &str, con
 
     bool found = false;
     auto p = text.begin() + from;
-    auto q = str.begin();
-    while( p != text.end() && q != str.end() ){
+    auto q = searchedText.begin();
+    while( p != text.end() && q != searchedText.end() ){
         if( toupper(*p) == toupper(*q) ){
             ++p;
             ++q;
             found = true;
             continue;
         }else if( found ){
-            auto backward = q - str.begin();
+            auto backward = q - searchedText.begin();
             p -= backward;
             q -= backward;
             found = false;
         }
         ++p;
     }
-    if( found && q==str.end() ){
-        auto ret = p - text.begin() - str.length();
+    if( found && q==searchedText.end() ){
+        auto ret = p - text.begin() - searchedText.length();
         return ret;
     }
     return string::npos;
@@ -147,11 +152,14 @@ int StringHelper::findNextInsensitive(const string &text, const string &str, con
 
 /******************************************************************************
  ******************************************************************************/
-/*! \brief Case-insensitive string comparison.
+/*! \brief Return true if the given \a searchedText is found
+ *         in the given \a text. Otherwise return false.
+ *
+ * \remark This function performs a case-insensitive string comparison.
  */
-bool StringHelper::containsInsensitive(const string &text, const string &str)
+bool StringHelper::containsInsensitive(const string &text, const string &searchedText)
 {
-    return (findNextInsensitive(text, str, 0) != (int)string::npos);
+    return (findNextInsensitive(text, searchedText, 0) != (int)string::npos);
 }
 
 /******************************************************************************
