@@ -24,7 +24,9 @@
 #include <sstream>
 #include <stdio.h>
 
-#if defined(Q_OS_UNIX)
+#if defined(Q_OS_WIN)
+#  include <windows.h>
+#elif defined(Q_OS_UNIX)
 #  include <limits.h>
 #endif
 
@@ -166,7 +168,12 @@ const string Engine::searchInclude(istream * const iodevice) const
 
     /* Magic Number 10:                                           */
     /*  -> increases buffer to store quotes and trimming space(s) */
-    string text(PATH_MAX + 10, '\0');
+#if defined(Q_OS_WIN)
+	string text(MAX_PATH + 10, '\0');
+#else
+	string text(PATH_MAX + 10, '\0');
+#endif
+
     iodevice->read( &text[0], text.length() );
     iodevice->clear();
     iodevice->seekg(oldpos);

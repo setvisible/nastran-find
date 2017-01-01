@@ -107,4 +107,25 @@ Go to **Project** -> **Run settings** -> **Environment**
 2. Add the `TERM` variable with `xterm` as value.
 
 
+## [BUG006][RESOLVED]  Curses and keys detection
+
+### Problem
+
+\todo
+
+Under Windows:
+ - when the programme is MinGW32-compiled from QtCreator (with QMake),
+ the keyboard's arrow keys are detected and we can navigate.
+ - when the programme is MinGW32-compiled from CMake, neither
+ the arrow keys nor the window's resizing aren't detected.
+
+Under Unix:
+ - no problem
+
+rem: see maybe the options of CMake?
+
+### Solution
+
+\todo
+
 

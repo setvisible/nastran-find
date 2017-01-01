@@ -20,6 +20,7 @@
 #include "systemdetection.h"
 
 #if defined(Q_OS_WIN)
+#  pragma comment(lib, "Shlwapi.lib")
 #  include <shlobj.h>     // SHGetKnownFolderPath()
 #  include <shlwapi.h>    // PathAppend()
 #elif defined(Q_OS_UNIX)

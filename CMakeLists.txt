@@ -2,7 +2,7 @@ project(nastranfind)
 
 ### Versioning
 set(NF_VERSION_MAJOR "1")
-set(NF_VERSION_MINOR "0")
+set(NF_VERSION_MINOR "1")
 set(NF_VERSION_PATCH "0")
 set(NF_VERSION "${NF_VERSION_MAJOR}.${NF_VERSION_MINOR}.${NF_VERSION_PATCH}")
 

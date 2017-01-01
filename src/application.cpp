@@ -126,10 +126,11 @@ void Application::resetConfig()
 // Remark: 'filename' can be absolute, canonical or relative...
 void Application::setFilename(const string &filename)
 {
-    char fullFilename[PATH_MAX];
 #if defined(Q_OS_WIN)
-    GetFullPathNameA(filename.c_str(), PATH_MAX, fullFilename, NULL);
+    char fullFilename[MAX_PATH];
+    GetFullPathNameA(filename.c_str(), MAX_PATH, fullFilename, NULL);
 #elif defined(Q_OS_UNIX)
+	char fullFilename[PATH_MAX];
     char *ret = realpath(filename.c_str(), fullFilename);
     if (!ret) {
         std::cout << "Warning: realpath( '" << ret << "'." << std::endl;
