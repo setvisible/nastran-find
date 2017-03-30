@@ -28,8 +28,8 @@ class Application
     enum class Color {
         NORMAL           = 1,
         TITLE               ,
-        SEARCHBOX           ,
-        FILENAME            ,
+        SEARCH_BOX          ,
+        FILE_NAME           ,
         LINE_NUMBER         ,
         OCCURRENCE          ,
         ERROR_MESSAGE       ,
