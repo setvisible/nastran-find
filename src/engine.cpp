@@ -1,4 +1,4 @@
-/* - NASTRANFIND - Copyright (C) 2016 Sebastien Vavassori
+/* - NASTRANFIND - Copyright (C) 2016-2017 Sebastien Vavassori
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -13,6 +13,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this program; If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "engine.h"
 
 #include "global.h"
@@ -92,7 +93,10 @@ void Engine::find(const string &fullFileName, const string &searchedText )
             string error_msg;
             error_msg += STR_ERR_CANNOT_OPEN + currentFileName + STR_ERR_QUOTE_END;
             m_errors.push_back( error_msg );
-            m_results[ currentFileName ].push_back( STR_ERR_MISSING_FILE );
+
+            Result& result = m_results[ currentFileName ];
+            stringlist& occurrences = result.occurrences;
+            occurrences.push_back( STR_ERR_MISSING_FILE );
 
         } else {
 
@@ -228,8 +232,8 @@ void Engine::searchText(const string &text,
         /* instead use of a string literal comparison, with a conversion        */
         /* to Upper Case to compare strings in a case insensitivity manner.     */
 
-        if ( StringHelper::containsInvisibleChar(searchedText) ||
-             StringHelper::containsInsensitive(text, searchedText) ) {
+        int found = StringHelper::countInsensitive(text, searchedText);
+        if ( (found > 0) || StringHelper::containsInvisibleChar(searchedText)) {
 
             /* Convert an integer into a length-fixed string */
             char buffer[ C_LINE_NUMBER_BUFFER_SIZE + 1 ];       // 8 digits + 1 '\0'
@@ -238,11 +242,16 @@ void Engine::searchText(const string &text,
             } else {
                 sprintf( buffer, C_LINE_NUMBER_FORMAT_CHAR, '.');
             }
-            string result = string("line")
+            string str = string("line")
                     + string(buffer)
                     + string(": ")
                     + text;
-            m_results[ currentFileName ].push_back( std::move(result) );
+
+            Result& result = m_results[ currentFileName ];
+            stringlist& occurrences = result.occurrences;
+            occurrences.push_back( std::move(str) );
+
+            result.occurrenceCount += found;
         }
     }
 }
@@ -272,8 +281,8 @@ void Engine::appendFileName(const string &filenameToBeInserted,
 
     /* Append the file to the file list */
     m_files.push_back( filenameToBeInserted );
-    stringlist emptyStringList;
-    m_results[ filenameToBeInserted ] = emptyStringList;
+    Result emptyResult;
+    m_results[ filenameToBeInserted ] = emptyResult;
 }
 
 /******************************************************************************
@@ -299,8 +308,8 @@ const string Engine::errorAt(const string::size_type index) const
 
 /******************************************************************************
  ******************************************************************************/
-/*! \brief Returns the number of occurences found, in the file and all its includes.
- * \sa resultCount(), resultCountLines()
+/*! \brief Returns the number of lines found, in the file and all its includes.
+ * \sa resultCount(), resultCountLines(), occurrenceCount()
  */
 stringlist::size_type Engine::resultCountAll() const
 {
@@ -330,8 +339,9 @@ stringlist::size_type Engine::resultCountLines(const string &filename) const
 stringlist::size_type Engine::resultCount(const string &filename) const
 {
     if( m_results.count(filename) > 0 ) {
-        const stringlist& result = m_results.at(filename);
-        return result.size();
+        const Result& result = m_results.at(filename);
+        const stringlist& occurrences = result.occurrences;
+        return occurrences.size();
     }
     return 0;
 }
@@ -341,11 +351,33 @@ stringlist::size_type Engine::resultCount(const string &filename) const
 const string Engine::resultAt(const string &filename, const stringlist::size_type index) const
 {
     if( m_results.count(filename) > 0 ) {
-        const stringlist& result = m_results.at(filename);
-        if (index < result.size()) {
-            return result.at(index);
+        const Result& result = m_results.at(filename);
+        const stringlist& occurrences = result.occurrences;
+        if (index < occurrences.size()) {
+            return occurrences.at(index);
         }
     }
     return string();
 }
 
+/******************************************************************************
+ ******************************************************************************/
+stringlist::size_type Engine::occurrenceCountAll() const
+{
+    auto value = 0;
+    for( stringlist::const_iterator it = m_files.begin(); it != m_files.end(); ++it ) {
+        const string& file = (*it);
+        value += occurrenceCount(file);
+    }
+    return value;
+}
+
+stringlist::size_type Engine::occurrenceCount(const string &filename) const
+{
+
+    if( m_results.count(filename) > 0 ) {
+        const Result& result = m_results.at(filename);
+        return result.occurrenceCount;
+    }
+    return 0;
+}

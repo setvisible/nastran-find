@@ -16,7 +16,7 @@
 #include <QtTest/QtTest>
 #include <QtCore/QDebug>
 
-#include "../../../src/engine.h"
+#include <Engine>
 
 #include <sstream> // std::istringstream
 
@@ -236,7 +236,8 @@ void tst_Search::test_find_two_occurences_on_same_line()
     engine.find( &buffer, "123", filename);
 
     // Then
-    QCOMPARE( (int)engine.resultCount(filename), 1);
+    QCOMPARE( (int)engine.resultCount(filename), 1);     // 1 line...
+    QCOMPARE( (int)engine.occurrenceCount(filename), 2); // ...but 2 occurrences
     QCOMPARE( engine.resultAt(filename, 0), std::string("line       1: CBAR         123     456 123.456   "));
 }
 

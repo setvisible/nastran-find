@@ -326,7 +326,7 @@ void Application::showResults()
 
     move(row,0);
     printw( "Results: %i occurences in %i files. (scroll %i/%i)",
-            m_engine.resultCountAll(),
+            m_engine.occurrenceCountAll(),
             m_engine.linkCount(),
             m_currentScroll, m_maximumScroll );
 
@@ -352,8 +352,9 @@ void Application::showResults()
             ++row;
         }
 
-        const stringmap& results = m_engine.results();
-        const stringlist& result = results.at(file);
+        const ResultMap& results = m_engine.results();
+        const Result& res = results.at(file);
+        const stringlist& result = res.occurrences;
 
         if( result.size() > 0 ) {
 

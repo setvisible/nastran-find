@@ -1,4 +1,4 @@
-/* - NASTRANFIND - Copyright (C) 2016 Sebastien Vavassori
+/* - NASTRANFIND - Copyright (C) 2016-2017 Sebastien Vavassori
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -13,15 +13,11 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this program; If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef ENGINE_H
 #define ENGINE_H
 
-#include <string>
-#include <vector>
-#include <map>
-
-typedef std::vector<std::string> stringlist;
-typedef std::map<std::string, stringlist> stringmap;
+#include "result.h"
 
 /* **************************************************************** */
 /* Messages stored in header file is required for testing           */
@@ -59,11 +55,14 @@ public:
     const std::string errorAt(const std::string::size_type index) const;
 
     /* Getters -> return the search results */
-    const stringmap& results() const { return m_results; }
+    const ResultMap& results() const { return m_results; }
     stringlist::size_type resultCountAll() const;
     stringlist::size_type resultCountLines(const std::string &filename) const;
     stringlist::size_type resultCount(const std::string &filename) const;
     const std::string resultAt(const std::string &filename, const stringlist::size_type index) const;
+
+    stringlist::size_type occurrenceCountAll() const;
+    stringlist::size_type occurrenceCount(const std::string &filename) const;
 
 
 protected:
@@ -82,7 +81,7 @@ private:
     stringlist m_errors;
 
     /* map containing the occurences for each file */
-    stringmap m_results;
+    ResultMap m_results;
 
     void appendFileName(const std::string &filenameToBeInserted,
                         const std::string &currentFileName,
