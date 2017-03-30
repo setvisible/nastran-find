@@ -16,7 +16,7 @@
 #include <QtTest/QtTest>
 #include <QtCore/QDebug>
 
-#include "../../../src/engine.h"
+#include <Engine>
 
 class tst_Engine : public QObject
 {

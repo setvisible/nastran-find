@@ -16,11 +16,11 @@
 #include <QtTest/QtTest>
 #include <QtCore/QDebug>
 
-#include "../../../src/engine.h"
+#include <Engine>
 
 #include <sstream> // std::istringstream
 
-class tst_Engine : public QObject
+class tst_Engine_Include : public QObject
 {
     Q_OBJECT
 
@@ -30,11 +30,11 @@ private slots:
 
 };
 
-class EngineFriend : Engine { friend class tst_Engine; };
+class EngineFriend : Engine { friend class tst_Engine_Include; };
 
 /******************************************************************************
  ******************************************************************************/
-void tst_Engine::test_searchInclude_data()
+void tst_Engine_Include::test_searchInclude_data()
 {
     QTest::addColumn<QString>("text");
     QTest::addColumn<QString>("expected");
@@ -153,7 +153,7 @@ void tst_Engine::test_searchInclude_data()
 
 }
 
-void tst_Engine::test_searchInclude()
+void tst_Engine_Include::test_searchInclude()
 {
     QFETCH(QString, text);
     QFETCH(QString, expected);
@@ -171,7 +171,7 @@ void tst_Engine::test_searchInclude()
 /******************************************************************************
  ******************************************************************************/
 
-QTEST_APPLESS_MAIN(tst_Engine)
+QTEST_APPLESS_MAIN(tst_Engine_Include)
 
-#include "tst_engine-include.moc"
+#include "tst_engine_include.moc"
 

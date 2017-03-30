@@ -8,6 +8,9 @@ SOURCES     += tst_engine.cpp
 
 #TESTDATA = shared/*
 
+# Include:
+INCLUDEPATH += $$PWD/../../../include
+
 # Dependancies:
 HEADERS += $$PWD/../../../src/engine.h
 SOURCES += $$PWD/../../../src/engine.cpp

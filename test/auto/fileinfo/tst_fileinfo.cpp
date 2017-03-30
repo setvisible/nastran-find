@@ -16,7 +16,7 @@
 #include <QtTest/QtTest>
 #include <QtCore/QDebug>
 
-#include "../../../src/fileinfo.h"
+#include <FileInfo>
 
 
 class tst_FileInfo : public QObject
