@@ -9,10 +9,10 @@ SOURCES     += tst_engine.cpp
 #TESTDATA = shared/*
 
 # Dependancies:
-HEADERS += ../../../src/engine.h
-SOURCES += ../../../src/engine.cpp
-HEADERS += ../../../src/fileinfo.h
-SOURCES += ../../../src/fileinfo.cpp
-HEADERS += ../../../src/stringhelper.h
-SOURCES += ../../../src/stringhelper.cpp
-HEADERS += ../../../src/systemdetection.h
+HEADERS += $$PWD/../../../src/engine.h
+SOURCES += $$PWD/../../../src/engine.cpp
+HEADERS += $$PWD/../../../src/fileinfo.h
+SOURCES += $$PWD/../../../src/fileinfo.cpp
+HEADERS += $$PWD/../../../src/stringhelper.h
+SOURCES += $$PWD/../../../src/stringhelper.cpp
+HEADERS += $$PWD/../../../src/systemdetection.h

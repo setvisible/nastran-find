@@ -1,2 +1,7 @@
 TEMPLATE=subdirs
-SUBDIRS += engine engine-include fileinfo search stringhelper
+
+SUBDIRS += engine
+SUBDIRS += engine-include
+SUBDIRS += fileinfo
+SUBDIRS += search
+SUBDIRS += stringhelper

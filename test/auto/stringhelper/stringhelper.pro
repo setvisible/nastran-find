@@ -5,5 +5,5 @@ QT           = core testlib
 SOURCES     += tst_stringhelper.cpp
 
 # Dependancies:
-HEADERS += ../../../src/stringhelper.h
-SOURCES += ../../../src/stringhelper.cpp
+HEADERS += $$PWD/../../../src/stringhelper.h
+SOURCES += $$PWD/../../../src/stringhelper.cpp
