@@ -31,7 +31,7 @@ class Application
         SEARCHBOX           ,
         FILENAME            ,
         LINE_NUMBER         ,
-        OCCURENCE           ,
+        OCCURRENCE          ,
         ERROR_MESSAGE       ,
         NASTRAN_CARD        ,
         NASTRAN_COMMENT     ,

@@ -96,10 +96,10 @@ void Application::initialize()
     /*              id color                foreground     background   */
     init_pair( (int)Color::NORMAL,          COLOR_WHITE,   COLOR_BLACK);
     init_pair( (int)Color::TITLE,           COLOR_BLACK,   COLOR_GREEN);
-    init_pair( (int)Color::SEARCHBOX,       COLOR_GREEN,   COLOR_BLACK);
-    init_pair( (int)Color::FILENAME,        COLOR_YELLOW,  COLOR_BLACK);
+    init_pair( (int)Color::SEARCH_BOX,      COLOR_GREEN,   COLOR_BLACK);
+    init_pair( (int)Color::FILE_NAME,       COLOR_YELLOW,  COLOR_BLACK);
     init_pair( (int)Color::LINE_NUMBER,     COLOR_CYAN,    COLOR_BLACK);
-    init_pair( (int)Color::OCCURENCE,       COLOR_BLACK,   COLOR_YELLOW);
+    init_pair( (int)Color::OCCURRENCE,      COLOR_BLACK,   COLOR_YELLOW);
     init_pair( (int)Color::ERROR_MESSAGE,   COLOR_BLACK,   COLOR_RED);
     init_pair( (int)Color::NASTRAN_CARD,    COLOR_YELLOW,  COLOR_BLACK);
     init_pair( (int)Color::NASTRAN_COMMENT, COLOR_GREEN,   COLOR_BLACK);
@@ -183,7 +183,7 @@ int Application::exec()
             move(3,9);
             echo();
 
-            colorize(Color::SEARCHBOX);
+            colorize(Color::SEARCH_BOX);
             char buffer[C_SEARCH_SIZE];
             getnstr( buffer, sizeof(buffer) - 1 ); // Curses: get a length-fixed input
             uncolorize();
@@ -299,7 +299,7 @@ void Application::showTitle()
     move(m_rowTitleBox+3,0);
     printw( "Search: <" );
 
-    colorize(Color::SEARCHBOX);
+    colorize(Color::SEARCH_BOX);
     if( m_searchedText.empty() ){
         printw( "---search field empty---" );
     }else{
@@ -346,7 +346,7 @@ void Application::showResults()
         ++first_page_shown;
         if( first_page_shown >= m_currentScroll && row < m_rowErrorBox ) {
             move(row,0);
-            colorize(Color::FILENAME);
+            colorize(Color::FILE_NAME);
             printw( "--- %s ---", file.c_str() );
             uncolorize();
             ++row;
@@ -409,7 +409,7 @@ void Application::printwSyntaxColoration(const string &text, const int row )
         /* ***************************** */
         /* Filename                      */
         /* ***************************** */
-        colorize(Color::FILENAME);
+        colorize(Color::FILE_NAME);
         printw( "%s", text.c_str() );
         uncolorize();
 
