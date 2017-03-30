@@ -1,4 +1,4 @@
-/* - NASTRANFIND - Copyright (C) 2016 Sebastien Vavassori
+/* - NASTRANFIND - Copyright (C) 2016-2017 Sebastien Vavassori
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -13,6 +13,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this program; If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef STRING_HELPER_H
 #define STRING_HELPER_H
 
@@ -33,7 +34,8 @@ public:
 
     static bool containsInvisibleChar(const std::string &text);
     static bool containsInsensitive(const std::string &text, const std::string &searchedText);
-    static int findNextInsensitive(const std::string &text, const std::string &searchedText, const int from);
+    static int countInsensitive(const std::string &text, const std::string &searchedText);
+    static int findNextInsensitive(const std::string &text, const std::string &searchedText, const std::string::size_type from);
 
     static int charCount ( const char * string, const char * characters );
 

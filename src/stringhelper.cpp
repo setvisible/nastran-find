@@ -33,10 +33,10 @@ using namespace std;
  */
 void StringHelper::removeCharsFromString( string &text, const string &charsToRemove )
 {
-   for ( unsigned int i = 0; i < charsToRemove.length(); ++i ) {
-      text.erase( std::remove(text.begin(), text.end(), charsToRemove.at(i)), text.end() );
-      text.resize( strlen( text.c_str() ) );
-   }
+    for ( unsigned int i = 0; i < charsToRemove.length(); ++i ) {
+        text.erase( std::remove(text.begin(), text.end(), charsToRemove.at(i)), text.end() );
+        text.resize( strlen( text.c_str() ) );
+    }
 }
 
 /******************************************************************************
@@ -118,12 +118,12 @@ bool StringHelper::containsInvisibleChar(const string &text)
  *
  * \remark This function performs a case-insensitive string comparison.
  */
-int StringHelper::findNextInsensitive(const string &text, const string &searchedText, const int from)
+int StringHelper::findNextInsensitive(const string &text, const string &searchedText, const string::size_type from)
 {
     if( text.empty() || searchedText.empty() )
         return string::npos;
 
-    if( from < 0 || from >= (int)text.length() )
+    if( from == string::npos || from >= text.length() )
         return string::npos;
 
     bool found = false;
@@ -161,6 +161,29 @@ bool StringHelper::containsInsensitive(const string &text, const string &searche
 {
     return (findNextInsensitive(text, searchedText, 0) != (int)string::npos);
 }
+
+
+/******************************************************************************
+ ******************************************************************************/
+/*!
+ * \brief Returns the number of (*no* overlapping)
+ *        occurrences of the given \a searchedText in the given \a text.
+ */
+int StringHelper::countInsensitive(const std::string &text, const std::string &searchedText)
+{
+    int count = 0;
+    const string::size_type length = searchedText.length();
+    string::size_type pos = 0;
+    while (true) {
+        pos = findNextInsensitive(text, searchedText, pos);
+        if (pos == string::npos)
+            break;
+        pos += length;
+        count++;
+    }
+    return count;
+}
+
 
 /******************************************************************************
  ******************************************************************************/
