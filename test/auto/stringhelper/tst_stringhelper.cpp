@@ -82,7 +82,7 @@ void tst_StringHelper::test_findNextInsensitive()
     string _text   = text.toStdString();
     string _search = search.toStdString();
 
-    int actual = StringHelper::findNextInsensitive(_text, _search, from);
+    int actual = StringHelper::findNext(_text, _search, from);
 
     QCOMPARE( actual, expected );
 }
@@ -122,7 +122,7 @@ void tst_StringHelper::test_countInsensitive()
     string _text   = text.toStdString();
     string _search = search.toStdString();
 
-    int actual = StringHelper::countInsensitive(_text, _search);
+    int actual = StringHelper::count(_text, _search);
 
     QCOMPARE( actual, expected );
 }

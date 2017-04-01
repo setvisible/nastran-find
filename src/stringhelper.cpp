@@ -92,9 +92,9 @@ char* StringHelper::trim( char* s, const char* delimiters)
 
 /******************************************************************************
  ******************************************************************************/
-/*! \brief Returns true if the given \a text has at least one white space or tab.
+/*! \brief Returns true if the given \a text contains only whitespaces and tabs.
  */
-bool StringHelper::containsInvisibleChar(const string &text)
+bool StringHelper::hasSpaces(const string &text)
 {
     auto p = text.begin();
     while (p != text.end()) {
@@ -116,9 +116,9 @@ bool StringHelper::containsInvisibleChar(const string &text)
  *   \li Return n, where n is the position of the first character of \a searchedText in \a text.
  *   \li Return string::npos, if \a searchedText is not found in \a text.
  *
- * \remark This function performs a case-insensitive string comparison.
+ * \remark This function performs a *case insensitive* string comparison.
  */
-int StringHelper::findNextInsensitive(const string &text, const string &searchedText, const string::size_type from)
+int StringHelper::findNext(const string &text, const string &searchedText, const string::size_type from)
 {
     if( text.empty() || searchedText.empty() )
         return string::npos;
@@ -157,9 +157,9 @@ int StringHelper::findNextInsensitive(const string &text, const string &searched
  *
  * \remark This function performs a case-insensitive string comparison.
  */
-bool StringHelper::containsInsensitive(const string &text, const string &searchedText)
+bool StringHelper::contains(const string &text, const string &searchedText)
 {
-    return (findNextInsensitive(text, searchedText, 0) != (int)string::npos);
+    return (findNext(text, searchedText, 0) != (int)string::npos);
 }
 
 
@@ -169,13 +169,13 @@ bool StringHelper::containsInsensitive(const string &text, const string &searche
  * \brief Returns the number of (*no* overlapping)
  *        occurrences of the given \a searchedText in the given \a text.
  */
-int StringHelper::countInsensitive(const std::string &text, const std::string &searchedText)
+int StringHelper::count(const std::string &text, const std::string &searchedText)
 {
     int count = 0;
     const string::size_type length = searchedText.length();
     string::size_type pos = 0;
     while (true) {
-        pos = findNextInsensitive(text, searchedText, pos);
+        pos = findNext(text, searchedText, pos);
         if (pos == string::npos)
             break;
         pos += length;
@@ -187,15 +187,16 @@ int StringHelper::countInsensitive(const std::string &text, const std::string &s
 
 /******************************************************************************
  ******************************************************************************/
-/*! \brief Returns the number of \a characters in the \a string. 
+/*! \brief Returns the number of \a characters in the \a text.
  */
-int StringHelper::charCount( const char * string, const char * characters )
+int StringHelper::countChar( const char* text, const char* characters )
 {
     int counter = 0;
-    while (*string) {
-        if(strspn(string, characters))
+    while (*text) {
+        if (strspn(text, characters)) {
             counter++;
-        string++;
+        }
+        text++;
     }
     return counter;
 }

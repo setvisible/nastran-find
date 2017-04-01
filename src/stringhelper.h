@@ -19,10 +19,6 @@
 
 #include <string>
 
-/* ******************************************* */
-/* reimplementation of some standard functions */
-/* ******************************************* */
-
 class StringHelper
 {
 public:
@@ -32,12 +28,15 @@ public:
     static char* trim_left( char* s, const char* delimiters );
     static char* trim( char* s, const char* delimiters = " \f\n\r\t\v");
 
-    static bool containsInvisibleChar(const std::string &text);
-    static bool containsInsensitive(const std::string &text, const std::string &searchedText);
-    static int countInsensitive(const std::string &text, const std::string &searchedText);
-    static int findNextInsensitive(const std::string &text, const std::string &searchedText, const std::string::size_type from);
+    static bool hasSpaces(const std::string &text);
+    static bool contains(const std::string &text, const std::string &searchedText);
+    static int count(const std::string &text, const std::string &searchedText);
 
-    static int charCount ( const char * string, const char * characters );
+    static int findNext(const std::string &text,
+                        const std::string &searchedText,
+                        const std::string::size_type from);
+
+    static int countChar( const char* text, const char* characters );
 
 };
 

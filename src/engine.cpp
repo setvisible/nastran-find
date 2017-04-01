@@ -232,8 +232,8 @@ void Engine::searchText(const string &text,
         /* instead use of a string literal comparison, with a conversion        */
         /* to Upper Case to compare strings in a case insensitivity manner.     */
 
-        int found = StringHelper::countInsensitive(text, searchedText);
-        if ( (found > 0) || StringHelper::containsInvisibleChar(searchedText)) {
+        int found = StringHelper::count(text, searchedText);
+        if ( (found > 0) || StringHelper::hasSpaces(searchedText)) {
 
             /* Convert an integer into a length-fixed string */
             char buffer[ C_LINE_NUMBER_BUFFER_SIZE + 1 ];       // 8 digits + 1 '\0'

@@ -498,13 +498,13 @@ void Application::printwSyntaxColoration(const string &text, const int row )
         /* ***************************** */
         /* Highlight the occurences      */
         /* ***************************** */
-        if ( !StringHelper::containsInvisibleChar(m_searchedText) ) {
+        if ( !StringHelper::hasSpaces(m_searchedText) ) {
             int len = m_searchedText.length();
-            int loc = StringHelper::findNextInsensitive(text, m_searchedText, C_LINE_NUMBER_WIDTH );
+            int loc = StringHelper::findNext(text, m_searchedText, C_LINE_NUMBER_WIDTH );
             while( loc >= 0 ){
                 move(row, loc);
                 text_in_a_box( text.c_str() + loc, len );
-                loc = StringHelper::findNextInsensitive(text, m_searchedText, loc+1 );
+                loc = StringHelper::findNext(text, m_searchedText, loc+1 );
             }
         }
 
